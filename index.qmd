@@ -1,0 +1,28 @@
+---
+title: "Unequal Green Access? A Spatial Analysis of Park Distribution and Neighborhood Income in Washington, D.C."
+author: "Your Name"
+affiliation: "Georgetown University"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+---
+
+# Abstract
+
+Access to urban green space is an important aspect of environmental quality and public well-being. This project examines whether higher-income neighborhoods in Washington, D.C. have disproportionately greater access to parks and green spaces. Using park locations from OpenStreetMap and median household income from the American Community Survey (ACS), the study evaluates first-order spatial patterns using intensity estimation and a simulation-based hypothesis testing framework. Results contribute to the broader literature on spatial equity and environmental justice.
+
+---
+
+# Table of Contents
+
+This manuscript follows the format recommended in the GIS for Spatial Data Science course:
+
+- [Introduction](introduction.qmd)
+- [Literature Review](literature.qmd)
+- [Methodology](methodology.qmd)
+- [Exploratory Data Analysis (EDA)](eda.qmd)
+- [Hypothesis Testing](hypothesis.qmd)
+- [Discussion](discussion.qmd)
+- [Conclusion](conclusion.qmd)
+- [References](references.qmd)

@@ -1,0 +1,14 @@
+---
+title: "Introduction"
+format: html
+---
+
+Urban green space—such as parks, gardens, and recreational areas—is widely recognized as a critical component of environmental quality and public well-being. Access to green space has been linked to improved physical and mental health, greater opportunities for recreation, lower levels of urban heat exposure, and enhanced social cohesion within communities. As cities grow and densify, the equitable distribution of parks becomes a central concern in urban planning and environmental justice.
+
+Many studies in environmental justice have found that socially advantaged neighborhoods often enjoy better access to ecological and recreational amenities, while lower-income communities may face “green space deficits.” These disparities can contribute to unequal health outcomes, reduced quality of life, and structural inequities embedded within the urban landscape.
+
+Washington, D.C. provides a compelling case study for examining such spatial inequalities. The city exhibits substantial variation in median household income across its census tracts, with pronounced socio-economic differences between Northwest D.C. and the neighborhoods east of the Anacostia River. At the same time, the District maintains a large inventory of parks and green spaces, making it an ideal environment for studying whether these amenities are evenly—or unevenly—distributed.
+
+This project investigates the spatial distribution of parks in Washington, D.C. and evaluates whether higher-income neighborhoods receive disproportionately greater access to green space. Specifically, the study focuses on first-order spatial properties through the estimation of an inhomogeneous intensity function and employs simulation-based hypothesis testing to assess whether observed patterns differ significantly from those expected under a population-driven null model.
+
+By integrating open-source geospatial data with point-pattern methods from spatial statistics, this research contributes to understanding the extent of environmental inequality in the nation’s capital and highlights broader implications for urban planning and equitable resource allocation.

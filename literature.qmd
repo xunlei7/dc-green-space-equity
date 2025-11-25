@@ -1,0 +1,9 @@
+---
+title: "Literature Review"
+format: html
+---
+
+Studies in environmental justice consistently show that access to parks and green space is often uneven across socio-economic groups. Research has found that higher-income neighborhoods typically have more and higher-quality green amenities, while lower-income communities face green space deficits (Wolch et al. 2014). Similar patterns have been documented in several U.S. cities, including evidence that park access strongly correlates with neighborhood wealth and historic patterns of urban inequality (Boone et al. 2009).  
+
+This project builds on that literature by examining whether Washington, D.C. exhibits similar income-based disparities in the spatial distribution of parks.
+

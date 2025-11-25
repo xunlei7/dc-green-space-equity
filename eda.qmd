@@ -1,0 +1,78 @@
+---
+title: "Exploratory Data Analysis (EDA)"
+format: html
+---
+
+# Exploratory Data Analysis (EDA)
+
+This section provides an initial overview of the spatial datasets used in the analysis and highlights key geographic patterns in the distribution of parks and neighborhood socioeconomic characteristics across Washington, D.C.
+
+---
+
+## 1. Base Maps: Parks and Census Tracts
+
+We begin by visualizing the core GIS layers:  
+(1) the centroids of all parks extracted from OpenStreetMap, and  
+(2) the census tract boundaries that contain income and population attributes.
+
+The tract boundaries reveal the spatial structure of Washington, D.C., while the park points illustrate their overall distribution across the city. This base map provides an early indication of potential clustering patterns, with park concentrations appearing denser in the western and central portions of the District.
+
+---
+
+## 2. Median Household Income (Choropleth)
+
+A choropleth map of median household income shows substantial socio-economic variation across the city.  
+Consistent with prior research, tracts in Northwest D.C. exhibit the highest income levels, while lower-income tracts are concentrated east of the Anacostia River.
+
+This spatial divide is important because it provides the socioeconomic context within which park access will be evaluated. These income gradients suggest that inequality—if present—may follow a clear east–west pattern.
+
+---
+
+## 3. Park Density and Kernel Visualization
+
+To identify broad first-order spatial patterns, a kernel density estimate (KDE) is applied to park locations.  
+The resulting surface highlights:
+
+- High-density clusters in Northwest and central D.C.  
+- Lower-density areas in parts of Southeast and far Northeast  
+- Sparse green space in several low-income tracts east of the Anacostia River  
+
+The KDE surface gives preliminary visual evidence of unequal park distribution.
+
+---
+
+## 4. Parks per Capita
+
+To account for differences in population across tracts, we compute **parks per 1,000 residents**:
+
+\[
+\text{Green Access (per 1000 residents)} = \frac{\# \text{parks in tract}}{\text{population}} \times 1000
+\]
+
+A choropleth of this metric shows that tracts with the highest green access tend to be among the most affluent.  
+Conversely, several low-income neighborhoods exhibit noticeably lower park access, suggesting potential environmental inequities.
+
+---
+
+## 5. Spatial Autocorrelation (Global and Local Moran’s I)
+
+To formally assess clustering, we evaluate:
+
+### **Global Moran’s I**
+- A positive Moran’s I would indicate that tracts with similar green access values cluster spatially.
+- Preliminary results show a positive and significant value, suggesting that high-access areas are surrounded by other high-access areas, and vice versa.
+
+### **Local Moran’s I (LISA)**
+The LISA map identifies specific clusters:
+
+- **High–High clusters**: Primarily in high-income Northwest D.C., where many contiguous tracts share strong park access.
+- **Low–Low clusters**: Mostly east of the Anacostia, where multiple neighboring tracts with low income also share low access to green space.
+
+These ESDA results provide strong motivation for the more formal point-pattern hypothesis testing that follows in the next section.
+
+---
+
+# Summary
+
+The EDA reveals substantial spatial variation in both income and park distribution across Washington, D.C.  
+Visualizations and autocorrelation analyses suggest the presence of income-based disparities in green space availability, motivating the need for formal first-order intensity modeling and simulation-based hypothesis testing.
