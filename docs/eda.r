@@ -1,12 +1,3 @@
----
-title: "Exploratory Data Analysis (EDA)"
-format:
-  html:
-    toc: true
-    toc-depth: 3
----
-
-```{r}
 library(sf)
 library(dplyr)
 library(ggplot2)
@@ -71,4 +62,3 @@ ggplot(tracts, aes(x = median_income, y = park_density)) +
     y = "Park Area per Person",
     title = "Income vs Park Density"
   )
-```
