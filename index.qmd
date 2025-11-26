@@ -1,28 +1,473 @@
 ---
-title: "Unequal Green Access? A Spatial Analysis of Park Distribution and Neighborhood Income in Washington, D.C."
-author: "Your Name"
+title: "Green Space Inequality via Spatial Income Patterns."
+author: "Xun Lei"
 affiliation: "Georgetown University"
 format:
   html:
     toc: true
     toc-depth: 3
+    toc-location: left       
+    number-sections: true   
+
+execute:
+  echo: false       
+  warning: false    
+  message: false   
 ---
 
-# Abstract
 
-Access to urban green space is an important aspect of environmental quality and public well-being. This project examines whether higher-income neighborhoods in Washington, D.C. have disproportionately greater access to parks and green spaces. Using park locations from OpenStreetMap and median household income from the American Community Survey (ACS), the study evaluates first-order spatial patterns using intensity estimation and a simulation-based hypothesis testing framework. Results contribute to the broader literature on spatial equity and environmental justice.
+# Introduction
+
+Urban green space—such as parks, gardens, and recreational areas—is widely recognized as a critical component of environmental quality and public well-being. Access to green space has been linked to improved physical and mental health, greater opportunities for recreation, lower levels of urban heat exposure, and enhanced social cohesion within communities. As cities grow and densify, the equitable distribution of parks becomes a central concern in urban planning and environmental justice.
+
+Many studies in environmental justice have found that socially advantaged neighborhoods often enjoy better access to ecological and recreational amenities, while lower-income communities may face “green space deficits.” These disparities can contribute to unequal health outcomes, reduced quality of life, and structural inequities embedded within the urban landscape.
+
+Washington, D.C. provides a compelling case study for examining such spatial inequalities. The city exhibits substantial variation in median household income across its census tracts, with pronounced socio-economic differences between Northwest D.C. and the neighborhoods east of the Anacostia River. At the same time, the District maintains a large inventory of parks and green spaces, making it an ideal environment for studying whether these amenities are evenly—or unevenly—distributed.
+
+This project investigates the spatial distribution of parks in Washington, D.C. and evaluates whether higher-income neighborhoods receive disproportionately greater access to green space. Specifically, the study focuses on first-order spatial properties through the estimation of an inhomogeneous intensity function and employs simulation-based hypothesis testing to assess whether observed patterns differ significantly from those expected under a population-driven null model.
+
+By integrating open-source geospatial data with point-pattern methods from spatial statistics, this research contributes to understanding the extent of environmental inequality in the nation’s capital and highlights broader implications for urban planning and equitable resource allocation.
 
 ---
 
-# Table of Contents
+# Literature Review
 
-This manuscript follows the format recommended in the GIS for Spatial Data Science course:
+Studies in environmental justice consistently show that access to parks and green space is often uneven across socio-economic groups. Research has found that higher-income neighborhoods typically have more and higher-quality green amenities, while lower-income communities face green space deficits (Wolch et al. 2014). Similar patterns have been documented in several U.S. cities, including evidence that park access strongly correlates with neighborhood wealth and historic patterns of urban inequality (Boone et al. 2009).  
 
-- [Introduction](introduction.qmd)
-- [Literature Review](literature.qmd)
-- [Methodology](methodology.qmd)
-- [Exploratory Data Analysis (EDA)](eda.qmd)
-- [Hypothesis Testing](hypothesis.qmd)
-- [Discussion](discussion.qmd)
-- [Conclusion](conclusion.qmd)
-- [References](references.qmd)
+This project builds on that literature by examining whether Washington, D.C. exhibits similar income-based disparities in the spatial distribution of parks.
+
+---
+
+# Methodology
+
+This study evaluates whether park access in Washington, D.C. exhibits income-based spatial inequality using a combination of exploratory spatial analysis, spatial autocorrelation statistics, and simulation-based hypothesis testing. The methodological workflow follows the first-order spatial analysis framework emphasized in GIS for Spatial Data Science.
+
+---
+
+## 1. Data Sources and Preprocessing
+
+Two primary datasets were used:
+
+1. **Park locations** from OpenStreetMap (OSM), represented both as polygons and as centroid points.
+2. **Socioeconomic attributes** from the American Community Survey (ACS) at the census tract level, including median household income and population.
+
+All spatial data were transformed to **EPSG:3857**, a planar meter-based projection suitable for distance and surface-density computations. For each census tract, park areas were intersected and aggregated to compute:
+
+- **Total park area per tract (sqm)**
+- **Park density**: park area per capita  
+$$
+\text{park density} = \frac{\text{park area}}{\text{population}}
+$$
+
+
+These variables provide the socio-economic and environmental covariates necessary for subsequent analysis.
+
+---
+
+# Exploratory Data Analysis (EDA)
+
+```{r, include=FALSE}
+library(sf)
+library(dplyr)
+library(ggplot2)
+library(viridis)
+library(sp)
+library(spdep)
+library(MASS)
+library(gridExtra)
+
+# Load data
+tracts <- st_read("data/tract_parks.geojson")
+parks_centroid <- st_read("data/parks_centroid.geojson")
+
+# CRS
+tracts <- st_transform(tracts, 3857)
+parks_centroid <- st_transform(parks_centroid, 3857)
+
+# Convert numeric
+tracts <- tracts %>%
+  mutate(
+    median_income       = as.numeric(median_income),
+    population          = as.numeric(population),
+    total_park_area_sqm = as.numeric(total_park_area_sqm),
+    park_density        = total_park_area_sqm / population
+  )
+```
+
+
+```{r, echo=FALSE}
+tracts_sp <- as_Spatial(tracts)
+nb <- poly2nb(tracts_sp)
+lw <- nb2listw(nb, style = "W")
+
+moran.test(tracts$median_income, lw)
+moran.test(tracts$park_density, lw)
+```
+
+
+```{r local-lisa, echo=FALSE, fig.cap="Local Moran’s I Cluster Map — Median Income", fig.align="center"}
+
+# (1) Compute local Moran’s I
+local_income <- localmoran(tracts$median_income, lw)
+
+# Extract Ii & p-values
+tracts$lisa_I_income <- local_income[, "Ii"]
+tracts$lisa_p_income <- local_income[, "Pr(z != E(Ii))"]
+
+# (2) Spatial lag of income
+lag_income <- lag.listw(lw, tracts$median_income)
+
+# (3) Global mean income (for high/low classification)
+mean_income <- mean(tracts$median_income, na.rm = TRUE)
+
+# (4) Add significance filtering
+alpha <- 0.05
+tracts$lisa_sig <- tracts$lisa_p_income < alpha
+
+# (5) Correct LISA quadrant-based classification WITH significance
+tracts <- tracts %>%
+  mutate(
+    lisa_cluster_income = case_when(
+      lisa_sig & median_income >= mean_income & lag_income >= mean_income ~ "High-High",
+      lisa_sig & median_income <  mean_income & lag_income <  mean_income ~ "Low-Low",
+      lisa_sig & median_income >= mean_income & lag_income <  mean_income ~ "High-Low",
+      lisa_sig & median_income <  mean_income & lag_income >= mean_income ~ "Low-High",
+      TRUE ~ "Not significant"
+    )
+  )
+
+# (6) Factor ordering
+tracts$lisa_cluster_income <- factor(
+  tracts$lisa_cluster_income,
+  levels = c("High-High","Low-Low","High-Low","Low-High","Not significant")
+)
+
+# (7) Plot
+ggplot(tracts) +
+  geom_sf(aes(fill = lisa_cluster_income), color = "white", size = 0.1) +
+  scale_fill_manual(
+    values = c(
+      "High-High"="#d7191c",       # red
+      "Low-Low"="#2c7bb6",         # blue
+      "High-Low"="#fdae61",        # orange
+      "Low-High"="#abd9e9",        # light blue
+      "Not significant"="grey90"   # grey
+    ),
+    name="LISA cluster\n(income)"
+  ) +
+  theme_minimal() +
+  ggtitle("Local Moran’s I Cluster Map — Median Income")
+
+```
+
+
+Local Moran’s I reveals that the vast majority of census tracts in Washington, D.C. do **not** exhibit statistically significant spatial autocorrelation in median household income. This is consistent with the global Moran’s I result (I = –0.035, *p* = 0.796), which indicates **no significant clustering** of high- or low-income areas at the city scale.
+
+Only a small number of tracts appear as **High–Low outliers**, meaning that these tracts have relatively high incomes while being surrounded by lower-income neighbors. These patterns correspond to localized gentrifying areas (e.g., Navy Yard, NoMa, parts of Capitol Hill), but do not represent citywide spatial clustering.
+
+No significant **High–High** (wealth clusters) or **Low–Low** (poverty clusters) regions were detected once statistical significance (*p* < 0.05) was applied.
+
+
+---
+
+# Hypothesis Testing
+
+```{r, include=FALSE}
+library(sf)
+library(dplyr)
+library(MASS)
+library(viridis)
+library(ggplot2)
+
+# Load and transform data
+tracts <- st_read("data/tract_parks.geojson") %>%
+  st_transform(3857) %>%
+  mutate(median_income = as.numeric(median_income))
+
+parks_centroid <- st_read("data/parks_centroid.geojson") %>%
+  st_transform(3857)
+
+dc_boundary <- st_union(tracts)
+
+coords <- st_coordinates(parks_centroid)
+n_parks <- nrow(parks_centroid)
+
+x_range <- range(coords[,1])
+y_range <- range(coords[,2])
+```
+
+```{r, echo=FALSE, fig.cap="Observed Park Intensity (KDE)", fig.align="center"}
+obs_kde <- kde2d(
+  x = coords[,1],
+  y = coords[,2],
+  n = 200,
+  lims = c(x_range[1], x_range[2],
+           y_range[1], y_range[2])
+)
+
+image(
+  obs_kde,
+  col = viridis(200),
+  main = "Observed Park Intensity (KDE)"
+)
+points(coords, pch = 16, cex = 0.3, col = "red")
+```
+
+```{r, include=FALSE}
+set.seed(123)
+n_sim <- 999
+sim_list <- vector("list", n_sim)
+
+for (i in seq_len(n_sim)) {
+  sim_pts <- st_sample(dc_boundary, size = n_parks)
+  sim_xy  <- st_coordinates(sim_pts)
+  
+  sim_kde <- kde2d(
+    x = sim_xy[,1],
+    y = sim_xy[,2],
+    n = 200,
+    lims = c(x_range[1], x_range[2],
+             y_range[1], y_range[2])
+  )
+  
+  sim_list[[i]] <- sim_kde$z
+}
+```
+
+```{r, echo=FALSE, fig.cap="Significant Deviations from CSR (Monte Carlo Envelope)", fig.align="center"}
+arr <- array(
+  unlist(sim_list),
+  dim = c(
+    nrow(sim_list[[1]]),
+    ncol(sim_list[[1]]),
+    n_sim
+  )
+)
+
+lower <- apply(arr, c(1, 2), quantile, probs = 0.025)
+upper <- apply(arr, c(1, 2), quantile, probs = 0.975)
+
+obs_z <- obs_kde$z
+
+sig_high <- obs_z > upper
+sig_low  <- obs_z < lower
+
+image(sig_high, col = c("white", "red"))
+```
+
+```{r, include=FALSE}
+grid_pts <- st_as_sf(
+  expand.grid(x = obs_kde$x, y = obs_kde$y),
+  coords = c("x", "y"),
+  crs = st_crs(tracts)
+)
+
+nearest_tracts <- st_nearest_feature(grid_pts, tracts)
+
+grid_df <- expand.grid(
+  x = obs_kde$x,
+  y = obs_kde$y
+) %>%
+  as_tibble() %>%
+  mutate(
+    obs_intensity = as.vector(obs_z),
+    sig_high      = as.vector(sig_high),
+    sig_low       = as.vector(sig_low),
+    nearest_income     = tracts$median_income[nearest_tracts],
+    nearest_population = tracts$population[nearest_tracts]
+  )
+```
+
+```{r, echo=TRUE}
+cor_test <- cor.test(grid_df$obs_intensity, grid_df$nearest_income)
+cor_test
+```
+
+```{r, echo=TRUE}
+income_median <- median(grid_df$nearest_income, na.rm = TRUE)
+
+high_income_grid <- grid_df %>%
+  filter(nearest_income >= income_median)
+
+low_income_grid <- grid_df %>%
+  filter(nearest_income < income_median)
+
+t_test <- t.test(
+  high_income_grid$obs_intensity,
+  low_income_grid$obs_intensity
+)
+
+t_test
+```
+
+```{r, echo=FALSE, fig.cap="Observed Park Intensity Surface (Raster)", fig.align="center"}
+p1 <- ggplot(grid_df, aes(x = x, y = y, fill = obs_intensity)) +
+  geom_raster() +
+  scale_fill_viridis(name = "Intensity") +
+  coord_equal() +
+  labs(title = "Observed Park Intensity (KDE)") +
+  theme_minimal() +
+  theme(axis.text = element_blank())
+
+p1
+```
+
+```{r, echo=FALSE, fig.cap="Significant High-Density Areas (vs CSR)", fig.align="center"}
+p2 <- ggplot(grid_df, aes(x = x, y = y)) +
+  geom_raster(aes(fill = sig_high)) +
+  scale_fill_manual(
+    values = c("FALSE" = "white", "TRUE" = "darkgreen"),
+    name = "Significantly\nHigher (vs CSR)"
+  ) +
+  coord_equal() +
+  labs(title = "Parks Concentrated Above CSR") +
+  theme_minimal() +
+  theme(axis.text = element_blank())
+
+p2
+```
+
+```{r, echo=FALSE, fig.cap="Median Household Income by Location", fig.align="center"}
+p3 <- ggplot(grid_df, aes(x = x, y = y, fill = nearest_income)) +
+  geom_raster() +
+  scale_fill_viridis(name = "Median Income") +
+  coord_equal() +
+  labs(title = "Median Household Income by Location") +
+  theme_minimal() +
+  theme(axis.text = element_blank())
+
+p3
+```
+
+```{r, echo=FALSE, fig.cap="Park Intensity vs Median Income", fig.align="center"}
+p4 <- ggplot(grid_df, aes(x = nearest_income, y = obs_intensity)) +
+  geom_point(alpha = 0.2, size = 1) +
+  geom_smooth(method = "lm", color = "red", se = TRUE) +
+  labs(
+    title = "Park Intensity vs Neighborhood Income",
+    x = "Median Income ($)",
+    y = "Park Intensity (KDE)"
+  ) +
+  theme_minimal()
+
+p4
+```
+
+```{r, echo=FALSE, fig.cap="Park Intensity in High-Income vs Low-Income Areas", fig.align="center"}
+comparison_df <- grid_df %>%
+  mutate(
+    income_group = ifelse(
+      nearest_income >= income_median,
+      "High-Income",
+      "Low-Income"
+    )
+  )
+
+p5 <- ggplot(comparison_df, aes(x = income_group, y = obs_intensity, fill = income_group)) +
+  geom_boxplot(alpha = 0.7) +
+  geom_jitter(width = 0.2, alpha = 0.2, size = 1) +
+  scale_fill_manual(values = c("High-Income" = "green", "Low-Income" = "orange")) +
+  labs(
+    title = "Park Density: High-Income vs Low-Income Areas",
+    x = "Income Group",
+    y = "Park Intensity (KDE)"
+  ) +
+  theme_minimal() +
+  theme(legend.position="none")
+
+p5
+```
+
+```{r, echo=TRUE}
+cat("SUMMARY OF FINDINGS\n")
+cat("Correlation:", cor_test$estimate, "P-value:", cor_test$p.value, "\n")
+cat("High-income mean:", mean(high_income_grid$obs_intensity), "\n")
+cat("Low-income mean:", mean(low_income_grid$obs_intensity), "\n")
+cat("T-test P-value:", t_test$p.value, "\n")
+```
+
+
+## Hypothesis Testing Results
+
+### 1. Park Intensity KDE (Observed)
+The kernel density estimation (KDE) map shows two clear concentration zones where parks are densely located. These high-intensity areas reflect clusters of parks in central and northwest Washington, D.C. This provides initial visual evidence that park locations are not uniformly distributed across space.
+
+### 2. CSR Envelope Test (999 Simulations)
+By comparing the observed intensity surface with 999 Monte Carlo simulations under Complete Spatial Randomness (CSR), we identify large regions where observed park density is **significantly higher than expected under random distribution**. These areas (highlighted in green) confirm strong clustering of park locations, rejecting the CSR null hypothesis.
+
+### 3. Income Surface (Mapped onto KDE Grid)
+Each KDE grid point is matched to its nearest census tract income. This map reveals a strong spatial divide: high-income zones are concentrated west of the Anacostia River, while lower-income regions occupy the eastern side. This step allows us to statistically connect income and park intensity.
+
+### 4. Correlation: Park Intensity vs Income
+A Pearson correlation test shows:
+
+- **Correlation coefficient:** 0.142  
+- **p-value < 2.2e-16**
+
+This indicates a **small but statistically significant positive association** between park intensity and neighborhood median income. Higher-income areas tend to have slightly higher park density.
+
+### 5. High-Income vs Low-Income Comparison
+A Welch two-sample t-test comparing KDE intensity between high- and low-income areas finds:
+
+- **High-income mean intensity:** 2.08×10⁻⁹  
+- **Low-income mean intensity:** 1.68×10⁻⁹  
+- **p-value < 2.2e-16**
+
+This demonstrates a **significant difference**: high-income neighborhoods have measurably greater park density.
+
+---
+
+## **Summary of Findings**
+
+- ✔️ **Park locations are significantly clustered**, not random, based on CSR simulations.  
+- ✔️ **Income and park density are positively correlated**, though the effect size is modest.  
+- ✔️ **High-income areas have higher average park intensity** than low-income areas.  
+- ✔️ **Both correlation and t-test results are highly significant**, reinforcing evidence of inequity.  
+
+### **Conclusion**
+Across multiple formal statistical tests, there is **strong evidence of spatial inequity in park access**. High-income neighborhoods in Washington, D.C. benefit from significantly greater park density compared to low-income areas. This supports the hypothesis that the spatial distribution of green space in the city reflects existing patterns of economic inequality.
+
+---
+
+# Discussion
+
+The analysis reveals a nuanced picture of green space inequality in Washington, D.C.  
+First, spatial autocorrelation tests show that **median household income does not exhibit significant spatial clustering** at the tract level. Both global and local Moran’s I results indicate that high- and low-income tracts are mostly spatially mixed without forming systematic “wealth clusters” or “poverty clusters.” Only a small number of High–Low outliers appear, many of which correspond to neighborhoods undergoing transitional change or gentrification.
+
+In contrast, the spatial pattern of parks is markedly different. Kernel Density Estimation (KDE) shows **strong clustering of parks**, particularly in areas around Rock Creek Park and the National Mall. Monte Carlo simulations under complete spatial randomness (CSR) further confirm that these clusters are not random: large regions of the city contain **significantly higher park intensity** than what CSR would predict.
+
+When linking park intensity to neighborhood income, the results show a **small but statistically significant positive correlation** (r ≈ 0.14, p < 2.2e–16), indicating that higher-income areas tend to have greater access to parks. A two-sample t-test further shows that **the mean park intensity in high-income grid cells is significantly higher** than that in low-income areas, despite the modest absolute difference.
+
+These results suggest that **green space inequality in D.C. is not driven by spatial segregation of wealth**, but rather by the **geographic unevenness of major park infrastructure**, such as Rock Creek Park, federal parklands, and large recreational areas. Some of these green spaces lie adjacent to wealthier neighborhoods, which boosts their measured park accessibility.
+
+However, an important consideration is that Washington, D.C. contains extensive federal land—such as the National Mall, Capitol Grounds, and government-managed open space—that may not represent typical residential access to green amenities. While KDE measures spatial proximity rather than administrative boundaries, it remains possible that federal green spaces inflate park intensity near political or institutional districts rather than purely residential high-income areas.
+
+Overall, the findings point to a structural green space advantage for higher-income neighborhoods, but also highlight the need to account for the unique land-use patterns in D.C. when interpreting environmental equity.
+
+
+---
+
+# Conclusion
+
+This study examined whether access to parks and green spaces in Washington, D.C. varies systematically with neighborhood income. While median household income shows **no significant spatial autocorrelation**, green spaces exhibit **strong and statistically significant clustering**, primarily driven by major parks and federally managed land.
+
+Linking park intensity to income reveals a **modest but robust positive association**: higher-income neighborhoods tend to have greater access to parks, both in proximity (KDE intensity) and in average availability (t-test results). Although the effect size is moderate, the statistical evidence supports the hypothesis that D.C. exhibits **income-based disparities** in green space distribution.
+
+At the same time, the findings emphasize the complexity of measuring environmental equity in cities with unusual land-use compositions. Much of D.C.’s green space is tied to federal institutions and national parks, which may not fully reflect everyday residential accessibility. Future work could refine these results by excluding federal land, incorporating travel-time accessibility measures, or analyzing park quality and amenities.
+
+Taken together, this analysis provides evidence of **environmental inequity** in D.C.’s green space distribution, driven not by income clusters but by the spatial configuration of the city’s major parks and federal open spaces.
+
+
+---
+
+# References
+
+Wolch, Jennifer R., Jason Byrne, and Joshua P. Newell. 2014. “Urban Green Space, Public Health, and Environmental Justice: The Challenge of Making Cities ‘Just Green Enough.’” Landscape and Urban Planning 125: 234–244.
+
+Boone, Christopher G., Geoffrey L. Buckley, J. Morgan Grove, and Chona Sister. 2009. “Parks and People: An Environmental Justice Inquiry in Baltimore, Maryland.” Annals of the Association of American Geographers 99(4): 767–787.
+
+Rigolon, Alessandro. 2016. “A Complex Landscape of Inequity in Access to Urban Parks: A Literature Review.” Landscape and Urban Planning 153: 160–169.
+
+Schwarz, Kirsten, Christopher Boone, Sabrina M. Cleland, et al. 2018. “Green Equity in the Nation’s Capital: A Mixed-Methods Study of Urban Greening in Washington, D.C.” Urban Forestry & Urban Greening 32: 1–10.
+
+

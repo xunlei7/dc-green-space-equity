@@ -4,21 +4,16 @@ project:
 
 website:
   title: "Green Space Inequality in Washington, D.C."
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - href: data.qmd
-        text: Data
-      - href: method.qmd
-        text: Methods
-      - href: analysis.qmd
-        text: Analysis
-      - href: conclusion.qmd
-        text: Conclusion
 
 format:
   html:
     theme: cosmo
     toc: true
     toc-depth: 3
+    toc-location: left   
+    number-sections: true
+
+execute:
+  echo: false       
+  warning: false    
+  message: false   
