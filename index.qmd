@@ -44,7 +44,7 @@ This study evaluates whether park access in Washington, D.C. exhibits income-bas
 
 ---
 
-## 1. Data Sources and Preprocessing
+## Data Sources and Preprocessing
 
 Two primary datasets were used:
 
@@ -105,81 +105,70 @@ moran.test(tracts$park_density, lw)
 ```
 
 
-```{r local-lisa, echo=FALSE, fig.cap="Local Moran’s I Cluster Map — Median Income", fig.align="center"}
+```{r income-quartiles, echo=FALSE, fig.cap="Median Income Quartiles", fig.align="center"}
 
-# (1) Compute local Moran’s I
-local_income <- localmoran(tracts$median_income, lw)
-
-# Extract Ii & p-values
-tracts$lisa_I_income <- local_income[, "Ii"]
-tracts$lisa_p_income <- local_income[, "Pr(z != E(Ii))"]
-
-# (2) Spatial lag of income
-lag_income <- lag.listw(lw, tracts$median_income)
-
-# (3) Global mean income (for high/low classification)
-mean_income <- mean(tracts$median_income, na.rm = TRUE)
-
-# (4) Add significance filtering
-alpha <- 0.05
-tracts$lisa_sig <- tracts$lisa_p_income < alpha
-
-# (5) Correct LISA quadrant-based classification WITH significance
-tracts <- tracts %>%
-  mutate(
-    lisa_cluster_income = case_when(
-      lisa_sig & median_income >= mean_income & lag_income >= mean_income ~ "High-High",
-      lisa_sig & median_income <  mean_income & lag_income <  mean_income ~ "Low-Low",
-      lisa_sig & median_income >= mean_income & lag_income <  mean_income ~ "High-Low",
-      lisa_sig & median_income <  mean_income & lag_income >= mean_income ~ "Low-High",
-      TRUE ~ "Not significant"
-    )
-  )
-
-# (6) Factor ordering
-tracts$lisa_cluster_income <- factor(
-  tracts$lisa_cluster_income,
-  levels = c("High-High","Low-Low","High-Low","Low-High","Not significant")
+# Compute quartiles
+tracts$income_quartile <- cut(
+  tracts$median_income,
+  breaks = quantile(tracts$median_income, probs = seq(0, 1, 0.25), na.rm = TRUE),
+  include.lowest = TRUE,
+  labels = c("Q1: Lowest", "Q2", "Q3", "Q4: Highest")
 )
 
-# (7) Plot
+# Plot quartiles
 ggplot(tracts) +
-  geom_sf(aes(fill = lisa_cluster_income), color = "white", size = 0.1) +
-  scale_fill_manual(
-    values = c(
-      "High-High"="#d7191c",       # red
-      "Low-Low"="#2c7bb6",         # blue
-      "High-Low"="#fdae61",        # orange
-      "Low-High"="#abd9e9",        # light blue
-      "Not significant"="grey90"   # grey
-    ),
-    name="LISA cluster\n(income)"
-  ) +
+  geom_sf(aes(fill = income_quartile), color = "white", size = 0.1) +
+  scale_fill_brewer(palette = "YlOrBr", name = "Income Quartile") +
+  ggtitle("Median Income Quartiles Across Washington, D.C.") +
   theme_minimal() +
-  ggtitle("Local Moran’s I Cluster Map — Median Income")
+  theme(
+    plot.title = element_text(size = 15, face = "bold", hjust = 0.5),
+    legend.position = "right"
+  )
+```
+
+```{r park-counts, echo=FALSE, fig.cap="Park Counts per Census Tract", fig.align="center"}
+
+# Spatial join: assign each park to a tract
+parks_in_tract <- st_join(parks_centroid, tracts, join = st_within)
+
+# Count how many parks fall into each tract
+park_counts <- parks_in_tract %>%
+  st_drop_geometry() %>%
+  count(GEOID, name = "n_parks")
+
+# Merge counts to tracts
+tracts <- tracts %>%
+  left_join(park_counts, by = "GEOID") %>%
+  mutate(n_parks = ifelse(is.na(n_parks), 0, n_parks))
+
+# Plot
+ggplot(tracts) +
+  geom_sf(aes(fill = n_parks), color = "white", size = 0.1) +
+  scale_fill_viridis_c(name = "Number of Parks", option = "C") +
+  ggtitle("Park Counts per Census Tract") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 15, face = "bold", hjust = 0.5)
+  )
+
+
 
 ```
 
 
-Local Moran’s I reveals that the vast majority of census tracts in Washington, D.C. do **not** exhibit statistically significant spatial autocorrelation in median household income. This is consistent with the global Moran’s I result (I = –0.035, *p* = 0.796), which indicates **no significant clustering** of high- or low-income areas at the city scale.
 
-Only a small number of tracts appear as **High–Low outliers**, meaning that these tracts have relatively high incomes while being surrounded by lower-income neighbors. These patterns correspond to localized gentrifying areas (e.g., Navy Yard, NoMa, parts of Capitol Hill), but do not represent citywide spatial clustering.
+## Hypothesis Testing
 
-No significant **High–High** (wealth clusters) or **Low–Low** (poverty clusters) regions were detected once statistical significance (*p* < 0.05) was applied.
+### Data Loading and Projection
 
-
----
-
-# Hypothesis Testing
-
-```{r, include=FALSE}
+```{r}
 library(sf)
 library(dplyr)
 library(MASS)
 library(viridis)
 library(ggplot2)
 
-# Load and transform data
 tracts <- st_read("data/tract_parks.geojson") %>%
   st_transform(3857) %>%
   mutate(median_income = as.numeric(median_income))
@@ -196,7 +185,15 @@ x_range <- range(coords[,1])
 y_range <- range(coords[,2])
 ```
 
-```{r, echo=FALSE, fig.cap="Observed Park Intensity (KDE)", fig.align="center"}
+
+---
+
+### Observed KDE of Park Locations
+
+```{r}
+install.packages("fields")
+library(fields)
+
 obs_kde <- kde2d(
   x = coords[,1],
   y = coords[,2],
@@ -205,57 +202,26 @@ obs_kde <- kde2d(
            y_range[1], y_range[2])
 )
 
-image(
+image.plot(
   obs_kde,
   col = viridis(200),
   main = "Observed Park Intensity (KDE)"
 )
+
 points(coords, pch = 16, cex = 0.3, col = "red")
+
 ```
 
-```{r, include=FALSE}
-set.seed(123)
-n_sim <- 999
-sim_list <- vector("list", n_sim)
+**Findings:**
+The KDE surface reveals visually distinct clusters of parks, especially in central and northwestern Washington, D.C. This provides initial evidence that park locations exhibit spatial concentration rather than a uniform distribution.
 
-for (i in seq_len(n_sim)) {
-  sim_pts <- st_sample(dc_boundary, size = n_parks)
-  sim_xy  <- st_coordinates(sim_pts)
-  
-  sim_kde <- kde2d(
-    x = sim_xy[,1],
-    y = sim_xy[,2],
-    n = 200,
-    lims = c(x_range[1], x_range[2],
-             y_range[1], y_range[2])
-  )
-  
-  sim_list[[i]] <- sim_kde$z
-}
-```
+---
 
-```{r, echo=FALSE, fig.cap="Significant Deviations from CSR (Monte Carlo Envelope)", fig.align="center"}
-arr <- array(
-  unlist(sim_list),
-  dim = c(
-    nrow(sim_list[[1]]),
-    ncol(sim_list[[1]]),
-    n_sim
-  )
-)
 
-lower <- apply(arr, c(1, 2), quantile, probs = 0.025)
-upper <- apply(arr, c(1, 2), quantile, probs = 0.975)
 
-obs_z <- obs_kde$z
+### Linking KDE Grid With Census Attributes
 
-sig_high <- obs_z > upper
-sig_low  <- obs_z < lower
-
-image(sig_high, col = c("white", "red"))
-```
-
-```{r, include=FALSE}
+```{r}
 grid_pts <- st_as_sf(
   expand.grid(x = obs_kde$x, y = obs_kde$y),
   coords = c("x", "y"),
@@ -278,12 +244,26 @@ grid_df <- expand.grid(
   )
 ```
 
-```{r, echo=TRUE}
+**Findings:**
+This code assigns each spatial grid cell the income value of its nearest census tract. This enables formal statistical testing between park density (continuous spatial surface) and neighborhood socioeconomic characteristics.
+
+---
+
+### Correlation Test
+
+```{r}
 cor_test <- cor.test(grid_df$obs_intensity, grid_df$nearest_income)
 cor_test
 ```
 
-```{r, echo=TRUE}
+**Findings:**
+The Pearson correlation coefficient is **0.142**, with a p-value < 2.2e−16. Although the effect size is small, the relationship is statistically significant, indicating that higher-income neighborhoods tend to correspond to slightly higher park intensity.
+
+---
+
+### High-Income vs Low-Income T-Test
+
+```{r}
 income_median <- median(grid_df$nearest_income, na.rm = TRUE)
 
 high_income_grid <- grid_df %>%
@@ -300,7 +280,14 @@ t_test <- t.test(
 t_test
 ```
 
-```{r, echo=FALSE, fig.cap="Observed Park Intensity Surface (Raster)", fig.align="center"}
+**Findings:**
+The Welch t-test shows a highly significant difference between the two groups (p < 2.2e−16). High-income areas have a notably higher mean KDE intensity, demonstrating that park density systematically varies across socioeconomic strata.
+
+---
+
+### Raster Plot: Observed Park Intensity
+
+```{r}
 p1 <- ggplot(grid_df, aes(x = x, y = y, fill = obs_intensity)) +
   geom_raster() +
   scale_fill_viridis(name = "Intensity") +
@@ -312,34 +299,16 @@ p1 <- ggplot(grid_df, aes(x = x, y = y, fill = obs_intensity)) +
 p1
 ```
 
-```{r, echo=FALSE, fig.cap="Significant High-Density Areas (vs CSR)", fig.align="center"}
-p2 <- ggplot(grid_df, aes(x = x, y = y)) +
-  geom_raster(aes(fill = sig_high)) +
-  scale_fill_manual(
-    values = c("FALSE" = "white", "TRUE" = "darkgreen"),
-    name = "Significantly\nHigher (vs CSR)"
-  ) +
-  coord_equal() +
-  labs(title = "Parks Concentrated Above CSR") +
-  theme_minimal() +
-  theme(axis.text = element_blank())
+**Findings:**
+The intensity surface highlights spatial concentration patterns consistent with previously identified KDE hotspots. This visualization reinforces evidence that parks are unevenly distributed across the city.
 
-p2
-```
+---
 
-```{r, echo=FALSE, fig.cap="Median Household Income by Location", fig.align="center"}
-p3 <- ggplot(grid_df, aes(x = x, y = y, fill = nearest_income)) +
-  geom_raster() +
-  scale_fill_viridis(name = "Median Income") +
-  coord_equal() +
-  labs(title = "Median Household Income by Location") +
-  theme_minimal() +
-  theme(axis.text = element_blank())
 
-p3
-```
 
-```{r, echo=FALSE, fig.cap="Park Intensity vs Median Income", fig.align="center"}
+### Scatter Plot: Income vs Park Intensity
+
+```{r}
 p4 <- ggplot(grid_df, aes(x = nearest_income, y = obs_intensity)) +
   geom_point(alpha = 0.2, size = 1) +
   geom_smooth(method = "lm", color = "red", se = TRUE) +
@@ -353,32 +322,14 @@ p4 <- ggplot(grid_df, aes(x = nearest_income, y = obs_intensity)) +
 p4
 ```
 
-```{r, echo=FALSE, fig.cap="Park Intensity in High-Income vs Low-Income Areas", fig.align="center"}
-comparison_df <- grid_df %>%
-  mutate(
-    income_group = ifelse(
-      nearest_income >= income_median,
-      "High-Income",
-      "Low-Income"
-    )
-  )
+**Findings:**
+A positive linear trend is visible, consistent with the correlation result. The fitted line shows that park intensity tends to increase gradually with rising income.
 
-p5 <- ggplot(comparison_df, aes(x = income_group, y = obs_intensity, fill = income_group)) +
-  geom_boxplot(alpha = 0.7) +
-  geom_jitter(width = 0.2, alpha = 0.2, size = 1) +
-  scale_fill_manual(values = c("High-Income" = "green", "Low-Income" = "orange")) +
-  labs(
-    title = "Park Density: High-Income vs Low-Income Areas",
-    x = "Income Group",
-    y = "Park Intensity (KDE)"
-  ) +
-  theme_minimal() +
-  theme(legend.position="none")
+---
 
-p5
-```
+### Numerical Summary**
 
-```{r, echo=TRUE}
+```{r}
 cat("SUMMARY OF FINDINGS\n")
 cat("Correlation:", cor_test$estimate, "P-value:", cor_test$p.value, "\n")
 cat("High-income mean:", mean(high_income_grid$obs_intensity), "\n")
@@ -386,43 +337,9 @@ cat("Low-income mean:", mean(low_income_grid$obs_intensity), "\n")
 cat("T-test P-value:", t_test$p.value, "\n")
 ```
 
+**Findings:**
+All reported statistics—correlation, mean differences, and t-test results—demonstrate a consistent pattern: **park density is higher in neighborhoods with higher median incomes**.
 
-## Hypothesis Testing Results
-
-### 1. Park Intensity KDE (Observed)
-The kernel density estimation (KDE) map shows two clear concentration zones where parks are densely located. These high-intensity areas reflect clusters of parks in central and northwest Washington, D.C. This provides initial visual evidence that park locations are not uniformly distributed across space.
-
-### 2. CSR Envelope Test (999 Simulations)
-By comparing the observed intensity surface with 999 Monte Carlo simulations under Complete Spatial Randomness (CSR), we identify large regions where observed park density is **significantly higher than expected under random distribution**. These areas (highlighted in green) confirm strong clustering of park locations, rejecting the CSR null hypothesis.
-
-### 3. Income Surface (Mapped onto KDE Grid)
-Each KDE grid point is matched to its nearest census tract income. This map reveals a strong spatial divide: high-income zones are concentrated west of the Anacostia River, while lower-income regions occupy the eastern side. This step allows us to statistically connect income and park intensity.
-
-### 4. Correlation: Park Intensity vs Income
-A Pearson correlation test shows:
-
-- **Correlation coefficient:** 0.142  
-- **p-value < 2.2e-16**
-
-This indicates a **small but statistically significant positive association** between park intensity and neighborhood median income. Higher-income areas tend to have slightly higher park density.
-
-### 5. High-Income vs Low-Income Comparison
-A Welch two-sample t-test comparing KDE intensity between high- and low-income areas finds:
-
-- **High-income mean intensity:** 2.08×10⁻⁹  
-- **Low-income mean intensity:** 1.68×10⁻⁹  
-- **p-value < 2.2e-16**
-
-This demonstrates a **significant difference**: high-income neighborhoods have measurably greater park density.
-
----
-
-## **Summary of Findings**
-
-- ✔️ **Park locations are significantly clustered**, not random, based on CSR simulations.  
-- ✔️ **Income and park density are positively correlated**, though the effect size is modest.  
-- ✔️ **High-income areas have higher average park intensity** than low-income areas.  
-- ✔️ **Both correlation and t-test results are highly significant**, reinforcing evidence of inequity.  
 
 ### **Conclusion**
 Across multiple formal statistical tests, there is **strong evidence of spatial inequity in park access**. High-income neighborhoods in Washington, D.C. benefit from significantly greater park density compared to low-income areas. This supports the hypothesis that the spatial distribution of green space in the city reflects existing patterns of economic inequality.
