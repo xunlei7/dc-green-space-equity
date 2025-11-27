@@ -122,18 +122,13 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#data-loading-and-projection" id="toc-data-loading-and-projection" class="nav-link" data-scroll-target="#data-loading-and-projection"><span class="header-section-number">4.1.1</span> Data Loading and Projection</a></li>
   <li><a href="#observed-kde-of-park-locations" id="toc-observed-kde-of-park-locations" class="nav-link" data-scroll-target="#observed-kde-of-park-locations"><span class="header-section-number">4.1.2</span> Observed KDE of Park Locations</a></li>
-  <li><a href="#monte-carlo-simulations-under-csr" id="toc-monte-carlo-simulations-under-csr" class="nav-link" data-scroll-target="#monte-carlo-simulations-under-csr"><span class="header-section-number">4.1.3</span> Monte Carlo Simulations Under CSR</a></li>
-  <li><a href="#monte-carlo-envelope-test" id="toc-monte-carlo-envelope-test" class="nav-link" data-scroll-target="#monte-carlo-envelope-test"><span class="header-section-number">4.1.4</span> Monte Carlo Envelope Test</a></li>
-  <li><a href="#linking-kde-grid-with-census-attributes" id="toc-linking-kde-grid-with-census-attributes" class="nav-link" data-scroll-target="#linking-kde-grid-with-census-attributes"><span class="header-section-number">4.1.5</span> Linking KDE Grid With Census Attributes</a></li>
-  <li><a href="#correlation-test" id="toc-correlation-test" class="nav-link" data-scroll-target="#correlation-test"><span class="header-section-number">4.1.6</span> Correlation Test</a></li>
-  <li><a href="#high-income-vs-low-income-t-test" id="toc-high-income-vs-low-income-t-test" class="nav-link" data-scroll-target="#high-income-vs-low-income-t-test"><span class="header-section-number">4.1.7</span> High-Income vs Low-Income T-Test</a></li>
-  <li><a href="#raster-plot-observed-park-intensity" id="toc-raster-plot-observed-park-intensity" class="nav-link" data-scroll-target="#raster-plot-observed-park-intensity"><span class="header-section-number">4.1.8</span> Raster Plot: Observed Park Intensity</a></li>
-  <li><a href="#significant-high-density-areas" id="toc-significant-high-density-areas" class="nav-link" data-scroll-target="#significant-high-density-areas"><span class="header-section-number">4.1.9</span> Significant High-Density Areas</a></li>
-  <li><a href="#income-surface" id="toc-income-surface" class="nav-link" data-scroll-target="#income-surface"><span class="header-section-number">4.1.10</span> Income Surface</a></li>
-  <li><a href="#scatter-plot-income-vs-park-intensity" id="toc-scatter-plot-income-vs-park-intensity" class="nav-link" data-scroll-target="#scatter-plot-income-vs-park-intensity"><span class="header-section-number">4.1.11</span> Scatter Plot: Income vs Park Intensity</a></li>
-  <li><a href="#boxplot-high-income-vs-low-income" id="toc-boxplot-high-income-vs-low-income" class="nav-link" data-scroll-target="#boxplot-high-income-vs-low-income"><span class="header-section-number">4.1.12</span> Boxplot: High-Income vs Low-Income</a></li>
-  <li><a href="#numerical-summary" id="toc-numerical-summary" class="nav-link" data-scroll-target="#numerical-summary"><span class="header-section-number">4.1.13</span> Numerical Summary**</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">4.1.14</span> <strong>Conclusion</strong></a></li>
+  <li><a href="#linking-kde-grid-with-census-attributes" id="toc-linking-kde-grid-with-census-attributes" class="nav-link" data-scroll-target="#linking-kde-grid-with-census-attributes"><span class="header-section-number">4.1.3</span> Linking KDE Grid With Census Attributes</a></li>
+  <li><a href="#correlation-test" id="toc-correlation-test" class="nav-link" data-scroll-target="#correlation-test"><span class="header-section-number">4.1.4</span> Correlation Test</a></li>
+  <li><a href="#high-income-vs-low-income-t-test" id="toc-high-income-vs-low-income-t-test" class="nav-link" data-scroll-target="#high-income-vs-low-income-t-test"><span class="header-section-number">4.1.5</span> High-Income vs Low-Income T-Test</a></li>
+  <li><a href="#raster-plot-observed-park-intensity" id="toc-raster-plot-observed-park-intensity" class="nav-link" data-scroll-target="#raster-plot-observed-park-intensity"><span class="header-section-number">4.1.6</span> Raster Plot: Observed Park Intensity</a></li>
+  <li><a href="#scatter-plot-income-vs-park-intensity" id="toc-scatter-plot-income-vs-park-intensity" class="nav-link" data-scroll-target="#scatter-plot-income-vs-park-intensity"><span class="header-section-number">4.1.7</span> Scatter Plot: Income vs Park Intensity</a></li>
+  <li><a href="#numerical-summary" id="toc-numerical-summary" class="nav-link" data-scroll-target="#numerical-summary"><span class="header-section-number">4.1.8</span> Numerical Summary**</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">4.1.9</span> <strong>Conclusion</strong></a></li>
   </ul></li>
   </ul></li>
   <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion"><span class="header-section-number">5</span> Discussion</a></li>
@@ -262,12 +257,8 @@ Moran I statistic       Expectation          Variance
 </div>
 </div>
 </div>
-<p>Local Moran’s I reveals that the vast majority of census tracts in Washington, D.C. do <strong>not</strong> exhibit statistically significant spatial autocorrelation in median household income. This is consistent with the global Moran’s I result (I = –0.035, <em>p</em> = 0.796), which indicates <strong>no significant clustering</strong> of high- or low-income areas at the city scale.</p>
-<p>Only a small number of tracts appear as <strong>High–Low outliers</strong>, meaning that these tracts have relatively high incomes while being surrounded by lower-income neighbors. These patterns correspond to localized gentrifying areas (e.g., Navy Yard, NoMa, parts of Capitol Hill), but do not represent citywide spatial clustering.</p>
-<p>No significant <strong>High–High</strong> (wealth clusters) or <strong>Low–Low</strong> (poverty clusters) regions were detected once statistical significance (<em>p</em> &lt; 0.05) was applied.</p>
 <section id="hypothesis-testing" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="hypothesis-testing"><span class="header-section-number">4.1</span> Hypothesis Testing</h2>
-<hr>
 <section id="data-loading-and-projection" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="data-loading-and-projection"><span class="header-section-number">4.1.1</span> Data Loading and Projection</h3>
 <div class="cell">
@@ -292,7 +283,6 @@ Bounding box:  xmin: -8583886 ymin: 4695669 xmax: -8562918 ymax: 4719953
 Projected CRS: WGS 84 / Pseudo-Mercator</code></pre>
 </div>
 </div>
-<p><strong>Findings:</strong> This block loads parks and census tracts, transforms them to a consistent projected CRS (EPSG:3857), and extracts coordinates for density estimation. These steps ensure spatial comparability and form the basis for the KDE and subsequent hypothesis testing.</p>
 <hr>
 </section>
 <section id="observed-kde-of-park-locations" class="level3" data-number="4.1.2">
@@ -309,32 +299,13 @@ Projected CRS: WGS 84 / Pseudo-Mercator</code></pre>
 <p><strong>Findings:</strong> The KDE surface reveals visually distinct clusters of parks, especially in central and northwestern Washington, D.C. This provides initial evidence that park locations exhibit spatial concentration rather than a uniform distribution.</p>
 <hr>
 </section>
-<section id="monte-carlo-simulations-under-csr" class="level3" data-number="4.1.3">
-<h3 data-number="4.1.3" class="anchored" data-anchor-id="monte-carlo-simulations-under-csr"><span class="header-section-number">4.1.3</span> Monte Carlo Simulations Under CSR</h3>
-<p><strong>Findings:</strong> This procedure generates 999 simulated park patterns under complete spatial randomness (CSR). These simulations create a reference distribution for expected park density if parks were placed uniformly across the city boundary.</p>
-<hr>
-</section>
-<section id="monte-carlo-envelope-test" class="level3" data-number="4.1.4">
-<h3 data-number="4.1.4" class="anchored" data-anchor-id="monte-carlo-envelope-test"><span class="header-section-number">4.1.4</span> Monte Carlo Envelope Test</h3>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p><strong>Findings:</strong> Large areas show observed KDE values exceeding the 97.5% Monte Carlo envelope. These statistically significant “high-intensity” areas indicate that park clustering <strong>cannot be explained by CSR</strong>, formally rejecting the null hypothesis of spatial randomness.</p>
-<hr>
-</section>
-<section id="linking-kde-grid-with-census-attributes" class="level3" data-number="4.1.5">
-<h3 data-number="4.1.5" class="anchored" data-anchor-id="linking-kde-grid-with-census-attributes"><span class="header-section-number">4.1.5</span> Linking KDE Grid With Census Attributes</h3>
+<section id="linking-kde-grid-with-census-attributes" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="linking-kde-grid-with-census-attributes"><span class="header-section-number">4.1.3</span> Linking KDE Grid With Census Attributes</h3>
 <p><strong>Findings:</strong> This code assigns each spatial grid cell the income value of its nearest census tract. This enables formal statistical testing between park density (continuous spatial surface) and neighborhood socioeconomic characteristics.</p>
 <hr>
 </section>
-<section id="correlation-test" class="level3" data-number="4.1.6">
-<h3 data-number="4.1.6" class="anchored" data-anchor-id="correlation-test"><span class="header-section-number">4.1.6</span> Correlation Test</h3>
+<section id="correlation-test" class="level3" data-number="4.1.4">
+<h3 data-number="4.1.4" class="anchored" data-anchor-id="correlation-test"><span class="header-section-number">4.1.4</span> Correlation Test</h3>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -353,8 +324,8 @@ sample estimates:
 <p><strong>Findings:</strong> The Pearson correlation coefficient is <strong>0.142</strong>, with a p-value &lt; 2.2e−16. Although the effect size is small, the relationship is statistically significant, indicating that higher-income neighborhoods tend to correspond to slightly higher park intensity.</p>
 <hr>
 </section>
-<section id="high-income-vs-low-income-t-test" class="level3" data-number="4.1.7">
-<h3 data-number="4.1.7" class="anchored" data-anchor-id="high-income-vs-low-income-t-test"><span class="header-section-number">4.1.7</span> High-Income vs Low-Income T-Test</h3>
+<section id="high-income-vs-low-income-t-test" class="level3" data-number="4.1.5">
+<h3 data-number="4.1.5" class="anchored" data-anchor-id="high-income-vs-low-income-t-test"><span class="header-section-number">4.1.5</span> High-Income vs Low-Income T-Test</h3>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -373,13 +344,13 @@ sample estimates:
 <p><strong>Findings:</strong> The Welch t-test shows a highly significant difference between the two groups (p &lt; 2.2e−16). High-income areas have a notably higher mean KDE intensity, demonstrating that park density systematically varies across socioeconomic strata.</p>
 <hr>
 </section>
-<section id="raster-plot-observed-park-intensity" class="level3" data-number="4.1.8">
-<h3 data-number="4.1.8" class="anchored" data-anchor-id="raster-plot-observed-park-intensity"><span class="header-section-number">4.1.8</span> Raster Plot: Observed Park Intensity</h3>
+<section id="raster-plot-observed-park-intensity" class="level3" data-number="4.1.6">
+<h3 data-number="4.1.6" class="anchored" data-anchor-id="raster-plot-observed-park-intensity"><span class="header-section-number">4.1.6</span> Raster Plot: Observed Park Intensity</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -387,41 +358,13 @@ sample estimates:
 <p><strong>Findings:</strong> The intensity surface highlights spatial concentration patterns consistent with previously identified KDE hotspots. This visualization reinforces evidence that parks are unevenly distributed across the city.</p>
 <hr>
 </section>
-<section id="significant-high-density-areas" class="level3" data-number="4.1.9">
-<h3 data-number="4.1.9" class="anchored" data-anchor-id="significant-high-density-areas"><span class="header-section-number">4.1.9</span> Significant High-Density Areas</h3>
+<section id="scatter-plot-income-vs-park-intensity" class="level3" data-number="4.1.7">
+<h3 data-number="4.1.7" class="anchored" data-anchor-id="scatter-plot-income-vs-park-intensity"><span class="header-section-number">4.1.7</span> Scatter Plot: Income vs Park Intensity</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p><strong>Findings:</strong> Significant clusters appear in specific subregions, confirming that these locations experience park densities far above what random placement would generate. These results are entirely data-driven and do not require assumptions about planning history.</p>
-<hr>
-</section>
-<section id="income-surface" class="level3" data-number="4.1.10">
-<h3 data-number="4.1.10" class="anchored" data-anchor-id="income-surface"><span class="header-section-number">4.1.10</span> Income Surface</h3>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p><strong>Findings:</strong> Income values display a strong spatial gradient across Washington, D.C. This spatial pattern provides the geographic structure needed to assess whether park density aligns with neighborhood socioeconomic differences.</p>
-<hr>
-</section>
-<section id="scatter-plot-income-vs-park-intensity" class="level3" data-number="4.1.11">
-<h3 data-number="4.1.11" class="anchored" data-anchor-id="scatter-plot-income-vs-park-intensity"><span class="header-section-number">4.1.11</span> Scatter Plot: Income vs Park Intensity</h3>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -429,22 +372,8 @@ sample estimates:
 <p><strong>Findings:</strong> A positive linear trend is visible, consistent with the correlation result. The fitted line shows that park intensity tends to increase gradually with rising income.</p>
 <hr>
 </section>
-<section id="boxplot-high-income-vs-low-income" class="level3" data-number="4.1.12">
-<h3 data-number="4.1.12" class="anchored" data-anchor-id="boxplot-high-income-vs-low-income"><span class="header-section-number">4.1.12</span> Boxplot: High-Income vs Low-Income</h3>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p><strong>Findings:</strong> The distribution of KDE intensities differs sharply between income groups. High-income neighborhoods exhibit higher medians and broader upper ranges, indicating greater overall access to dense park areas.</p>
-<hr>
-</section>
-<section id="numerical-summary" class="level3" data-number="4.1.13">
-<h3 data-number="4.1.13" class="anchored" data-anchor-id="numerical-summary"><span class="header-section-number">4.1.13</span> Numerical Summary**</h3>
+<section id="numerical-summary" class="level3" data-number="4.1.8">
+<h3 data-number="4.1.8" class="anchored" data-anchor-id="numerical-summary"><span class="header-section-number">4.1.8</span> Numerical Summary**</h3>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>SUMMARY OF FINDINGS</code></pre>
@@ -464,8 +393,8 @@ sample estimates:
 </div>
 <p><strong>Findings:</strong> All reported statistics—correlation, mean differences, and t-test results—demonstrate a consistent pattern: <strong>park density is higher in neighborhoods with higher median incomes</strong>.</p>
 </section>
-<section id="conclusion" class="level3" data-number="4.1.14">
-<h3 data-number="4.1.14" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">4.1.14</span> <strong>Conclusion</strong></h3>
+<section id="conclusion" class="level3" data-number="4.1.9">
+<h3 data-number="4.1.9" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">4.1.9</span> <strong>Conclusion</strong></h3>
 <p>Across multiple formal statistical tests, there is <strong>strong evidence of spatial inequity in park access</strong>. High-income neighborhoods in Washington, D.C. benefit from significantly greater park density compared to low-income areas. This supports the hypothesis that the spatial distribution of green space in the city reflects existing patterns of economic inequality.</p>
 <hr>
 </section>

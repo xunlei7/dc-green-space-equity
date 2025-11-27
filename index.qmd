@@ -191,7 +191,6 @@ y_range <- range(coords[,2])
 ### Observed KDE of Park Locations
 
 ```{r}
-install.packages("fields")
 library(fields)
 
 obs_kde <- kde2d(
@@ -236,12 +235,11 @@ grid_df <- expand.grid(
 ) %>%
   as_tibble() %>%
   mutate(
-    obs_intensity = as.vector(obs_z),
-    sig_high      = as.vector(sig_high),
-    sig_low       = as.vector(sig_low),
+    obs_intensity = as.vector(obs_kde$z),  
     nearest_income     = tracts$median_income[nearest_tracts],
     nearest_population = tracts$population[nearest_tracts]
   )
+
 ```
 
 **Findings:**
@@ -284,26 +282,6 @@ t_test
 The Welch t-test shows a highly significant difference between the two groups (p < 2.2e−16). High-income areas have a notably higher mean KDE intensity, demonstrating that park density systematically varies across socioeconomic strata.
 
 ---
-
-### Raster Plot: Observed Park Intensity
-
-```{r}
-p1 <- ggplot(grid_df, aes(x = x, y = y, fill = obs_intensity)) +
-  geom_raster() +
-  scale_fill_viridis(name = "Intensity") +
-  coord_equal() +
-  labs(title = "Observed Park Intensity (KDE)") +
-  theme_minimal() +
-  theme(axis.text = element_blank())
-
-p1
-```
-
-**Findings:**
-The intensity surface highlights spatial concentration patterns consistent with previously identified KDE hotspots. This visualization reinforces evidence that parks are unevenly distributed across the city.
-
----
-
 
 
 ### Scatter Plot: Income vs Park Intensity
