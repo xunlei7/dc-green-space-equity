@@ -75,7 +75,7 @@ library(sp)
 library(spdep)
 library(MASS)
 library(gridExtra)
-
+library(tidyr)
 # Load data
 tracts <- st_read("data/tract_parks.geojson")
 parks_centroid <- st_read("data/parks_centroid.geojson")
@@ -158,7 +158,7 @@ ggplot(tracts) +
 
 
 
-## Hypothesis Testing
+# Hypothesis Testing
 
 ### Data Loading and Projection
 
@@ -287,70 +287,133 @@ The Welch t-test shows a highly significant difference between the two groups (p
 ### Scatter Plot: Income vs Park Intensity
 
 ```{r}
-p4 <- ggplot(grid_df, aes(x = nearest_income, y = obs_intensity)) +
-  geom_point(alpha = 0.2, size = 1) +
+### ============================================================
+### 1. Data Cleaning
+### ============================================================
+
+library(dplyr)
+library(ggplot2)
+
+# 1. Convert population to numeric
+grid_df$nearest_population <- as.numeric(grid_df$nearest_population)
+
+# 2. Replace impossible negative income values with NA
+grid_df <- grid_df %>%
+  mutate(nearest_income = ifelse(nearest_income < 0, NA, nearest_income))
+
+# 3. Drop NA rows
+grid_df <- grid_df %>% 
+  tidyr::drop_na(nearest_income, nearest_population)
+
+### ============================================================
+### 2. Log Transformation
+### ============================================================
+
+grid_df <- grid_df %>%
+  mutate(
+    log_intensity = log(obs_intensity + 1e-12)   # avoid log(0)
+  )
+
+### ============================================================
+### 3. OLS Regression on Log Intensity
+### ============================================================
+
+model_log <- lm(log_intensity ~ nearest_income, data = grid_df)
+summary(model_log)
+
+### ============================================================
+### 4. Plot: log-transformed regression
+### ============================================================
+
+p_log <- ggplot(grid_df, aes(x = nearest_income, y = log_intensity)) +
+  geom_point(alpha = 0.2, size = 0.8) +
   geom_smooth(method = "lm", color = "red", se = TRUE) +
   labs(
-    title = "Park Intensity vs Neighborhood Income",
+    title = "Log(Park Intensity) vs Income (OLS)",
     x = "Median Income ($)",
-    y = "Park Intensity (KDE)"
+    y = "log(Park Intensity)"
   ) +
   theme_minimal()
 
-p4
+p_log
+
+
+### ============================================================
+### 5. Income Grouping (high vs low income)
+### ============================================================
+
+income_median <- median(grid_df$nearest_income, na.rm = TRUE)
+
+grid_df <- grid_df %>% 
+  mutate(
+    income_group = ifelse(nearest_income >= income_median, 
+                          "High income", "Low income")
+  )
+
+### ============================================================
+### 6. Grouped regressions
+### ============================================================
+
+# High income model
+model_high <- lm(log_intensity ~ nearest_income, 
+                 data = grid_df %>% filter(income_group == "High income"))
+
+# Low income model
+model_low <- lm(log_intensity ~ nearest_income, 
+                data = grid_df %>% filter(income_group == "Low income"))
+
+summary(model_high)
+summary(model_low)
+
+### ============================================================
+### 7. Plot: grouped regression lines
+### ============================================================
+
+p_group <- ggplot(grid_df, aes(x = nearest_income, 
+                               y = log_intensity, 
+                               color = income_group)) +
+  geom_point(alpha = 0.15, size = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, size = 1.2) +
+  scale_color_manual(values = c("High income" = "red", "Low income" = "blue")) +
+  labs(
+    title = "Income-Stratified Regression: Log(Park Intensity)",
+    x = "Median Income ($)",
+    y = "log(Park Intensity)",
+    color = "Income Group"
+  ) +
+  theme_minimal()
+
+p_group
+
+
+### ============================================================
+### 8. Optional: Multiple Regression (income + population)
+### ============================================================
+
+model2 <- lm(log_intensity ~ nearest_income + nearest_population, 
+             data = grid_df)
+summary(model2)
+
+
+
 ```
 
-**Findings:**
-A positive linear trend is visible, consistent with the correlation result. The fitted line shows that park intensity tends to increase gradually with rising income.
 
 ---
 
-### Numerical Summary**
-
-```{r}
-cat("SUMMARY OF FINDINGS\n")
-cat("Correlation:", cor_test$estimate, "P-value:", cor_test$p.value, "\n")
-cat("High-income mean:", mean(high_income_grid$obs_intensity), "\n")
-cat("Low-income mean:", mean(low_income_grid$obs_intensity), "\n")
-cat("T-test P-value:", t_test$p.value, "\n")
-```
-
-**Findings:**
-All reported statistics—correlation, mean differences, and t-test results—demonstrate a consistent pattern: **park density is higher in neighborhoods with higher median incomes**.
-
-
 ### **Conclusion**
-Across multiple formal statistical tests, there is **strong evidence of spatial inequity in park access**. High-income neighborhoods in Washington, D.C. benefit from significantly greater park density compared to low-income areas. This supports the hypothesis that the spatial distribution of green space in the city reflects existing patterns of economic inequality.
+
 
 ---
 
 # Discussion
 
-The analysis reveals a nuanced picture of green space inequality in Washington, D.C.  
-First, spatial autocorrelation tests show that **median household income does not exhibit significant spatial clustering** at the tract level. Both global and local Moran’s I results indicate that high- and low-income tracts are mostly spatially mixed without forming systematic “wealth clusters” or “poverty clusters.” Only a small number of High–Low outliers appear, many of which correspond to neighborhoods undergoing transitional change or gentrification.
-
-In contrast, the spatial pattern of parks is markedly different. Kernel Density Estimation (KDE) shows **strong clustering of parks**, particularly in areas around Rock Creek Park and the National Mall. Monte Carlo simulations under complete spatial randomness (CSR) further confirm that these clusters are not random: large regions of the city contain **significantly higher park intensity** than what CSR would predict.
-
-When linking park intensity to neighborhood income, the results show a **small but statistically significant positive correlation** (r ≈ 0.14, p < 2.2e–16), indicating that higher-income areas tend to have greater access to parks. A two-sample t-test further shows that **the mean park intensity in high-income grid cells is significantly higher** than that in low-income areas, despite the modest absolute difference.
-
-These results suggest that **green space inequality in D.C. is not driven by spatial segregation of wealth**, but rather by the **geographic unevenness of major park infrastructure**, such as Rock Creek Park, federal parklands, and large recreational areas. Some of these green spaces lie adjacent to wealthier neighborhoods, which boosts their measured park accessibility.
-
-However, an important consideration is that Washington, D.C. contains extensive federal land—such as the National Mall, Capitol Grounds, and government-managed open space—that may not represent typical residential access to green amenities. While KDE measures spatial proximity rather than administrative boundaries, it remains possible that federal green spaces inflate park intensity near political or institutional districts rather than purely residential high-income areas.
-
-Overall, the findings point to a structural green space advantage for higher-income neighborhoods, but also highlight the need to account for the unique land-use patterns in D.C. when interpreting environmental equity.
 
 
 ---
 
 # Conclusion
 
-This study examined whether access to parks and green spaces in Washington, D.C. varies systematically with neighborhood income. While median household income shows **no significant spatial autocorrelation**, green spaces exhibit **strong and statistically significant clustering**, primarily driven by major parks and federally managed land.
-
-Linking park intensity to income reveals a **modest but robust positive association**: higher-income neighborhoods tend to have greater access to parks, both in proximity (KDE intensity) and in average availability (t-test results). Although the effect size is moderate, the statistical evidence supports the hypothesis that D.C. exhibits **income-based disparities** in green space distribution.
-
-At the same time, the findings emphasize the complexity of measuring environmental equity in cities with unusual land-use compositions. Much of D.C.’s green space is tied to federal institutions and national parks, which may not fully reflect everyday residential accessibility. Future work could refine these results by excluding federal land, incorporating travel-time accessibility measures, or analyzing park quality and amenities.
-
-Taken together, this analysis provides evidence of **environmental inequity** in D.C.’s green space distribution, driven not by income clusters but by the spatial configuration of the city’s major parks and federal open spaces.
 
 
 ---
