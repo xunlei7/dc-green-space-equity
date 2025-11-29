@@ -116,20 +116,33 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#data-sources-and-preprocessing" id="toc-data-sources-and-preprocessing" class="nav-link" data-scroll-target="#data-sources-and-preprocessing"><span class="header-section-number">3.1</span> Data Sources and Preprocessing</a></li>
   </ul></li>
-  <li><a href="#exploratory-data-analysis-eda" id="toc-exploratory-data-analysis-eda" class="nav-link" data-scroll-target="#exploratory-data-analysis-eda"><span class="header-section-number">4</span> Exploratory Data Analysis (EDA)</a></li>
+  <li><a href="#exploratory-data-analysis-eda" id="toc-exploratory-data-analysis-eda" class="nav-link" data-scroll-target="#exploratory-data-analysis-eda"><span class="header-section-number">4</span> Exploratory Data Analysis (EDA)</a>
+  <ul class="collapse">
+  <li><a href="#spatial-distribution-of-median-household-income" id="toc-spatial-distribution-of-median-household-income" class="nav-link" data-scroll-target="#spatial-distribution-of-median-household-income"><span class="header-section-number">4.0.1</span> Spatial Distribution of Median Household Income</a></li>
+  <li><a href="#spatial-distribution-of-park-density" id="toc-spatial-distribution-of-park-density" class="nav-link" data-scroll-target="#spatial-distribution-of-park-density"><span class="header-section-number">4.0.2</span> Spatial Distribution of Park Density</a></li>
+  <li><a href="#spatial-intensity-of-park-locations-kde" id="toc-spatial-intensity-of-park-locations-kde" class="nav-link" data-scroll-target="#spatial-intensity-of-park-locations-kde"><span class="header-section-number">4.0.3</span> Spatial Intensity of Park Locations (KDE)</a></li>
+  </ul></li>
   <li><a href="#hypothesis-testing" id="toc-hypothesis-testing" class="nav-link" data-scroll-target="#hypothesis-testing"><span class="header-section-number">5</span> Hypothesis Testing</a>
   <ul class="collapse">
-  <li><a href="#data-loading-and-projection" id="toc-data-loading-and-projection" class="nav-link" data-scroll-target="#data-loading-and-projection"><span class="header-section-number">5.0.1</span> Data Loading and Projection</a></li>
-  <li><a href="#observed-kde-of-park-locations" id="toc-observed-kde-of-park-locations" class="nav-link" data-scroll-target="#observed-kde-of-park-locations"><span class="header-section-number">5.0.2</span> Observed KDE of Park Locations</a></li>
-  <li><a href="#linking-kde-grid-with-census-attributes" id="toc-linking-kde-grid-with-census-attributes" class="nav-link" data-scroll-target="#linking-kde-grid-with-census-attributes"><span class="header-section-number">5.0.3</span> Linking KDE Grid With Census Attributes</a></li>
-  <li><a href="#correlation-test" id="toc-correlation-test" class="nav-link" data-scroll-target="#correlation-test"><span class="header-section-number">5.0.4</span> Correlation Test</a></li>
-  <li><a href="#high-income-vs-low-income-t-test" id="toc-high-income-vs-low-income-t-test" class="nav-link" data-scroll-target="#high-income-vs-low-income-t-test"><span class="header-section-number">5.0.5</span> High-Income vs Low-Income T-Test</a></li>
-  <li><a href="#scatter-plot-income-vs-park-intensity" id="toc-scatter-plot-income-vs-park-intensity" class="nav-link" data-scroll-target="#scatter-plot-income-vs-park-intensity"><span class="header-section-number">5.0.6</span> Scatter Plot: Income vs Park Intensity</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">5.0.7</span> <strong>Conclusion</strong></a></li>
+  <li><a href="#correlation-test" id="toc-correlation-test" class="nav-link" data-scroll-target="#correlation-test"><span class="header-section-number">5.0.1</span> Correlation Test</a></li>
+  <li><a href="#high-income-vs-low-income-t-test" id="toc-high-income-vs-low-income-t-test" class="nav-link" data-scroll-target="#high-income-vs-low-income-t-test"><span class="header-section-number">5.0.2</span> High-Income vs Low-Income T-Test</a></li>
+  <li><a href="#scatter-plot-income-vs-park-intensity" id="toc-scatter-plot-income-vs-park-intensity" class="nav-link" data-scroll-target="#scatter-plot-income-vs-park-intensity"><span class="header-section-number">5.0.3</span> Scatter Plot: Income vs Park Intensity</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">5.0.4</span> Conclusion</a></li>
   </ul></li>
-  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion"><span class="header-section-number">6</span> Discussion</a></li>
+  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion"><span class="header-section-number">6</span> Discussion</a>
+  <ul class="collapse">
+  <li><a href="#the-quantity-vs.-quality-paradox" id="toc-the-quantity-vs.-quality-paradox" class="nav-link" data-scroll-target="#the-quantity-vs.-quality-paradox"><span class="header-section-number">6.0.1</span> The “Quantity vs.&nbsp;Quality” Paradox</a></li>
+  <li><a href="#the-asymmetry-of-privilege" id="toc-the-asymmetry-of-privilege" class="nav-link" data-scroll-target="#the-asymmetry-of-privilege"><span class="header-section-number">6.0.2</span> The Asymmetry of Privilege</a></li>
+  <li><a href="#the-density-penalty" id="toc-the-density-penalty" class="nav-link" data-scroll-target="#the-density-penalty"><span class="header-section-number">6.0.3</span> The Density Penalty</a></li>
+  </ul></li>
   <li><a href="#conclusion-1" id="toc-conclusion-1" class="nav-link" data-scroll-target="#conclusion-1"><span class="header-section-number">7</span> Conclusion</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">8</span> References</a></li>
+  <li><a href="#conclusion-2" id="toc-conclusion-2" class="nav-link" data-scroll-target="#conclusion-2"><span class="header-section-number">8</span> Conclusion</a>
+  <ul class="collapse">
+  <li><a href="#answering-the-core-question-evidence-of-disproportionate-access" id="toc-answering-the-core-question-evidence-of-disproportionate-access" class="nav-link" data-scroll-target="#answering-the-core-question-evidence-of-disproportionate-access"><span class="header-section-number">8.0.1</span> Answering the Core Question: Evidence of Disproportionate Access</a></li>
+  <li><a href="#characterizing-the-urban-landscape-of-inequity" id="toc-characterizing-the-urban-landscape-of-inequity" class="nav-link" data-scroll-target="#characterizing-the-urban-landscape-of-inequity"><span class="header-section-number">8.0.2</span> Characterizing the “Urban Landscape of Inequity”</a></li>
+  <li><a href="#implications-for-planning-and-equity" id="toc-implications-for-planning-and-equity" class="nav-link" data-scroll-target="#implications-for-planning-and-equity"><span class="header-section-number">8.0.3</span> Implications for Planning and Equity</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9</span> References</a></li>
   </ul>
 </nav>
 </nav>
@@ -169,21 +182,32 @@ window.Quarto = {
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>Urban green space—such as parks, gardens, and recreational areas—is widely recognized as a critical component of environmental quality and public well-being. Access to green space has been linked to improved physical and mental health, greater opportunities for recreation, lower levels of urban heat exposure, and enhanced social cohesion within communities. As cities grow and densify, the equitable distribution of parks becomes a central concern in urban planning and environmental justice.</p>
 <p>Many studies in environmental justice have found that socially advantaged neighborhoods often enjoy better access to ecological and recreational amenities, while lower-income communities may face “green space deficits.” These disparities can contribute to unequal health outcomes, reduced quality of life, and structural inequities embedded within the urban landscape.</p>
-<p>Washington, D.C. provides a compelling case study for examining such spatial inequalities. The city exhibits substantial variation in median household income across its census tracts, with pronounced socio-economic differences between Northwest D.C. and the neighborhoods east of the Anacostia River. At the same time, the District maintains a large inventory of parks and green spaces, making it an ideal environment for studying whether these amenities are evenly—or unevenly—distributed.</p>
 <p>This project investigates the spatial distribution of parks in Washington, D.C. and evaluates whether higher-income neighborhoods receive disproportionately greater access to green space. Specifically, the study focuses on first-order spatial properties through the estimation of an inhomogeneous intensity function and employs simulation-based hypothesis testing to assess whether observed patterns differ significantly from those expected under a population-driven null model.</p>
 <p>By integrating open-source geospatial data with point-pattern methods from spatial statistics, this research contributes to understanding the extent of environmental inequality in the nation’s capital and highlights broader implications for urban planning and equitable resource allocation.</p>
 <hr>
 </section>
 <section id="literature-review" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Literature Review</h1>
-<p>Studies in environmental justice consistently show that access to parks and green space is often uneven across socio-economic groups. Research has found that higher-income neighborhoods typically have more and higher-quality green amenities, while lower-income communities face green space deficits (Wolch et al.&nbsp;2014). Similar patterns have been documented in several U.S. cities, including evidence that park access strongly correlates with neighborhood wealth and historic patterns of urban inequality (Boone et al.&nbsp;2009).</p>
-<p>This project builds on that literature by examining whether Washington, D.C. exhibits similar income-based disparities in the spatial distribution of parks.</p>
+<p>Wolch, Byrne, and Newell (2014), Boone et al.&nbsp;(2009), and Schwarz et al.&nbsp;(2018) analyze the relationship between <strong>environmental justice</strong> and the spatial distribution of urban green space. Their key findings are that:</p>
+<blockquote class="blockquote">
+<p>Higher-income neighborhoods typically possess more and higher-quality green amenities, while lower-income communities face significant green space deficits (Wolch et al.&nbsp;2014; Rigolon 2016).</p>
+</blockquote>
+<p>and</p>
+<blockquote class="blockquote">
+<p>Specific to Washington, D.C., there is a “complex landscape of inequity” where historical patterns of urban development have led to distinct disparities in green access across the capital (Schwarz et al.&nbsp;2018).</p>
+</blockquote>
+<p>This relationship is vividly illustrated in <strong>Figure 1</strong>. The map displays the Tree Equity Score, revealing a stark geographic divide: the affluent Northwest quadrants appear in <strong>green</strong> (indicating high canopy and equity), while the lower-income Eastern and Southeastern quadrants are dominated by <strong>orange</strong> tones (indicating severe deficits).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="image_eea7e2.jpeg" class="img-fluid figure-img"></p>
+<figcaption><strong>Figure 1.</strong> Spatial distribution of Tree Equity Scores in Washington, D.C. The visual contrast between the green areas (Northwest) and orange areas (Southeast) highlights the environmental disparity described by Schwarz et al.&nbsp;(2018). <em>(Source: American Forests, Tree Equity Score Map)</em></figcaption>
+</figure>
+</div>
 <hr>
 </section>
 <section id="methodology" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Methodology</h1>
-<p>This study evaluates whether park access in Washington, D.C. exhibits income-based spatial inequality using a combination of exploratory spatial analysis, spatial autocorrelation statistics, and simulation-based hypothesis testing. The methodological workflow follows the first-order spatial analysis framework emphasized in GIS for Spatial Data Science.</p>
-<hr>
+<p>This study evaluates whether park access in Washington, D.C. exhibits income-based spatial inequality using a combination of exploratory spatial analysis, spatial autocorrelation statistics, and simulation-based hypothesis testing.</p>
 <section id="data-sources-and-preprocessing" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="data-sources-and-preprocessing"><span class="header-section-number">3.1</span> Data Sources and Preprocessing</h2>
 <p>Two primary datasets were used:</p>
@@ -205,34 +229,8 @@ window.Quarto = {
 </section>
 <section id="exploratory-data-analysis-eda" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Exploratory Data Analysis (EDA)</h1>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Moran I test under randomisation
-
-data:  tracts$median_income  
-weights: lw    
-
-Moran I statistic standard deviate = -0.82782, p-value = 0.7961
-alternative hypothesis: greater
-sample estimates:
-Moran I statistic       Expectation          Variance 
-     -0.035478979      -0.004878049       0.001366476 </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Moran I test under randomisation
-
-data:  tracts$park_density  
-weights: lw    
-
-Moran I statistic standard deviate = 8.0735, p-value = 3.416e-16
-alternative hypothesis: greater
-sample estimates:
-Moran I statistic       Expectation          Variance 
-      0.295826424      -0.004878049       0.001387258 </code></pre>
-</div>
-</div>
+<section id="spatial-distribution-of-median-household-income" class="level3" data-number="4.0.1">
+<h3 data-number="4.0.1" class="anchored" data-anchor-id="spatial-distribution-of-median-household-income"><span class="header-section-number">4.0.1</span> Spatial Distribution of Median Household Income</h3>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -243,6 +241,15 @@ Moran I statistic       Expectation          Variance
 </div>
 </div>
 </div>
+<p><strong>Figure 1</strong> illustrates the socioeconomic landscape of the District using data divided into quartiles. The map employs a “Yellow-Orange-Brown” color scale where <strong>darker brown tones indicate higher median incomes</strong>, while <strong>lighter yellow tones represent lower incomes</strong>.</p>
+<ul>
+<li><p><strong>The “Northwest Wedge” (Dark Brown):</strong> The map is visually anchored by a concentration of <strong>dark brown</strong> tracts in the Northwest quadrant (e.g., Ward 3). These areas represent the city’s economic peak (Q4), with median household incomes consistently falling into the highest quartile.</p></li>
+<li><p><strong>The East-West Divide (Color Gradient):</strong> A striking transition is visible as one moves from west to east. The color shifts from the dark earth tones of the Northwest to <strong>pale yellow</strong> in the Southeast and areas east of the Anacostia River. This stark contrast highlights a sharp economic boundary, visualizing the concentration of lower-income households (Q1) in specific geographic pockets.</p></li>
+<li><p><strong>Transitional Zones:</strong> The central areas of the city display intermediate colors (<strong>orange and gold</strong>), reflecting the spatial buffer of middle-income and gentrifying neighborhoods (Q2 and Q3) that separate the city’s wealthiest and poorest districts.</p></li>
+</ul>
+</section>
+<section id="spatial-distribution-of-park-density" class="level3" data-number="4.0.2">
+<h3 data-number="4.0.2" class="anchored" data-anchor-id="spatial-distribution-of-park-density"><span class="header-section-number">4.0.2</span> Spatial Distribution of Park Density</h3>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -253,56 +260,33 @@ Moran I statistic       Expectation          Variance
 </div>
 </div>
 </div>
+<p><strong>Figure 2</strong> visualizes the <strong>number of parks per census tract</strong> (Park Frequency). This metric highlights the availability of distinct green space access points rather than their total physical size.</p>
+<ul>
+<li><p><strong>Low Park Frequency in the Northwest (Dark Purple):</strong> The large tracts in the Northwest quadrant predominantly appear in <strong>dark purple</strong>, indicating a very low count of individual parks per tract. Despite being a wealthy area (as seen in Figure 1), the data suggests that green space here is likely consolidated into fewer, singular features rather than distributed as a network of many smaller community parks.</p></li>
+<li><p><strong>High Frequency in the Urban Core (Yellow/Orange):</strong> In stark contrast, the city center and Capitol Hill area appear in <strong>bright yellow and orange</strong>. This indicates a high density of discrete park locations. Residents in these tracts have access to a greater number of separate green spaces—likely small squares, plazas, or pocket parks—integrated into the dense urban grid.</p></li>
+<li><p><strong>Limited Access Points in the Southeast:</strong> Similar to the Northwest, large portions of the Southeast and East display <strong>dark purple tones</strong>, signaling a scarcity of park sites. For these lower-income neighborhoods (identified in Figure 1), the low number of parks represents a limitation in <em>choice</em> and <em>accessibility</em>. Unlike the downtown core, where parks are frequent and interspersed, residents here rely on fewer specific locations for recreation.</p></li>
+</ul>
 </section>
-<section id="hypothesis-testing" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Hypothesis Testing</h1>
-<section id="data-loading-and-projection" class="level3" data-number="5.0.1">
-<h3 data-number="5.0.1" class="anchored" data-anchor-id="data-loading-and-projection"><span class="header-section-number">5.0.1</span> Data Loading and Projection</h3>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Reading layer `tract_parks' from data source 
-  `/Users/xunlei/Desktop/6805/dc-green-space-equity/data/tract_parks.geojson' 
-  using driver `GeoJSON'
-Simple feature collection with 206 features and 20 fields
-Geometry type: POLYGON
-Dimension:     XY
-Bounding box:  xmin: -8584932 ymin: 4691870 xmax: -8561514 ymax: 4721076
-Projected CRS: WGS 84 / Pseudo-Mercator</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Reading layer `parks_centroid' from data source 
-  `/Users/xunlei/Desktop/6805/dc-green-space-equity/data/parks_centroid.geojson' 
-  using driver `GeoJSON'
-Simple feature collection with 253 features and 55 fields
-Geometry type: POINT
-Dimension:     XY
-Bounding box:  xmin: -8583886 ymin: 4695669 xmax: -8562918 ymax: 4719953
-Projected CRS: WGS 84 / Pseudo-Mercator</code></pre>
-</div>
-</div>
-<hr>
-</section>
-<section id="observed-kde-of-park-locations" class="level3" data-number="5.0.2">
-<h3 data-number="5.0.2" class="anchored" data-anchor-id="observed-kde-of-park-locations"><span class="header-section-number">5.0.2</span> Observed KDE of Park Locations</h3>
+<section id="spatial-intensity-of-park-locations-kde" class="level3" data-number="4.0.3">
+<h3 data-number="4.0.3" class="anchored" data-anchor-id="spatial-intensity-of-park-locations-kde"><span class="header-section-number">4.0.3</span> Spatial Intensity of Park Locations (KDE)</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p><strong>Findings:</strong> The KDE surface reveals visually distinct clusters of parks, especially in central and northwestern Washington, D.C. This provides initial evidence that park locations exhibit spatial concentration rather than a uniform distribution.</p>
+<p>To complement the tract-level count map (Figure 2), we generated a Kernel Density Estimation (KDE) surface. Unlike census boundaries which are artificial, KDE transforms park points into a continuous field of “park intensity,” allowing us to visualize hotspots that span across neighborhood borders.</p>
+<p><strong>Figure 3</strong> reveals a massive, concentrated hotspot (bright yellow) covering the Downtown and Capitol Hill areas. This confirms that while the city center may lack large park acreage, it possesses the highest <em>frequency</em> of accessible green spaces. Conversely, the “purple voids” in the residential Northwest and Southeast visualize the lower density of park access points in these regions.</p>
 <hr>
 </section>
-<section id="linking-kde-grid-with-census-attributes" class="level3" data-number="5.0.3">
-<h3 data-number="5.0.3" class="anchored" data-anchor-id="linking-kde-grid-with-census-attributes"><span class="header-section-number">5.0.3</span> Linking KDE Grid With Census Attributes</h3>
-<p><strong>Findings:</strong> This code assigns each spatial grid cell the income value of its nearest census tract. This enables formal statistical testing between park density (continuous spatial surface) and neighborhood socioeconomic characteristics.</p>
-<hr>
 </section>
-<section id="correlation-test" class="level3" data-number="5.0.4">
-<h3 data-number="5.0.4" class="anchored" data-anchor-id="correlation-test"><span class="header-section-number">5.0.4</span> Correlation Test</h3>
+<section id="hypothesis-testing" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Hypothesis Testing</h1>
+<section id="correlation-test" class="level3" data-number="5.0.1">
+<h3 data-number="5.0.1" class="anchored" data-anchor-id="correlation-test"><span class="header-section-number">5.0.1</span> Correlation Test</h3>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -318,11 +302,19 @@ sample estimates:
 0.1416236 </code></pre>
 </div>
 </div>
-<p><strong>Findings:</strong> The Pearson correlation coefficient is <strong>0.142</strong>, with a p-value &lt; 2.2e−16. Although the effect size is small, the relationship is statistically significant, indicating that higher-income neighborhoods tend to correspond to slightly higher park intensity.</p>
+<p>To quantify the global relationship between park availability and socioeconomic status, we performed a Pearson’s product-moment correlation test between the continuous park intensity surface (KDE values) and the median household income of the nearest census tract.</p>
+<p>The analysis yields a <strong>statistically significant positive correlation</strong>:</p>
+<ul>
+<li><strong>Correlation Coefficient (<span class="math inline">\(r\)</span>):</strong> <span class="math inline">\(0.142\)</span></li>
+<li><strong>p-value:</strong> <span class="math inline">\(&lt; 2.2 \times 10^{-16}\)</span></li>
+</ul>
+<p><strong>Interpretation:</strong></p>
+<p>The positive coefficient indicates that, generally, as neighborhood income increases, the density of park locations also tends to increase. The extremely small p-value (well below the <span class="math inline">\(0.05\)</span> threshold) allows us to reject the null hypothesis, confirming that this relationship is not due to random chance.</p>
+<p>However, the magnitude of the correlation (<span class="math inline">\(r \approx 0.14\)</span>) is considered <strong>weak</strong>. This suggests that while income is a contributing factor to park distribution, it is not the sole determinant. Other factors—such as the historic L’Enfant Plan layout in the commercial core—likely introduce variability that dilutes the direct linear link between residential wealth and park frequency.</p>
 <hr>
 </section>
-<section id="high-income-vs-low-income-t-test" class="level3" data-number="5.0.5">
-<h3 data-number="5.0.5" class="anchored" data-anchor-id="high-income-vs-low-income-t-test"><span class="header-section-number">5.0.5</span> High-Income vs Low-Income T-Test</h3>
+<section id="high-income-vs-low-income-t-test" class="level3" data-number="5.0.2">
+<h3 data-number="5.0.2" class="anchored" data-anchor-id="high-income-vs-low-income-t-test"><span class="header-section-number">5.0.2</span> High-Income vs Low-Income T-Test</h3>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -338,128 +330,153 @@ sample estimates:
 2.078248e-09 1.681672e-09 </code></pre>
 </div>
 </div>
-<p><strong>Findings:</strong> The Welch t-test shows a highly significant difference between the two groups (p &lt; 2.2e−16). High-income areas have a notably higher mean KDE intensity, demonstrating that park density systematically varies across socioeconomic strata.</p>
+<p>Given the complexity of the global correlation, we proceeded to a <strong>Welch Two Sample t-test</strong> to determine if there is a statistically significant structural gap between wealthier and less affluent neighborhoods. We stratified the city into two distinct groups based on the median income threshold: “High Income” (above median) and “Low Income” (below median).</p>
+<p><strong>Results:</strong></p>
+<p>The t-test reveals a highly significant disparity in park intensity between the two groups:</p>
+<ul>
+<li><strong>t-statistic:</strong> <span class="math inline">\(18.88\)</span></li>
+<li><strong>p-value:</strong> <span class="math inline">\(&lt; 2.2 \times 10^{-16}\)</span></li>
+<li><strong>Group Means:</strong>
+<ul>
+<li><strong>High-Income Group Mean:</strong> <span class="math inline">\(2.08 \times 10^{-9}\)</span></li>
+<li><strong>Low-Income Group Mean:</strong> <span class="math inline">\(1.68 \times 10^{-9}\)</span></li>
+</ul></li>
+</ul>
+<p><strong>Interpretation:</strong></p>
+<p>The results strongly reject the null hypothesis of equality. The <strong>High-Income group exhibits a significantly higher mean park intensity</strong> (approximately 24% higher) compared to the Low-Income group.</p>
+<p>The extremely low p-value indicates that this difference is systematic and not due to random variation. This finding is critical: it demonstrates that while the linear correlation might be diluted by mixed-use commercial areas, a clear <strong>“green gap”</strong> exists. Residents in the upper half of the income distribution generally reside in areas with systematically higher frequencies of park access points than those in the lower half.</p>
 <hr>
 </section>
-<section id="scatter-plot-income-vs-park-intensity" class="level3" data-number="5.0.6">
-<h3 data-number="5.0.6" class="anchored" data-anchor-id="scatter-plot-income-vs-park-intensity"><span class="header-section-number">5.0.6</span> Scatter Plot: Income vs Park Intensity</h3>
+<section id="scatter-plot-income-vs-park-intensity" class="level3" data-number="5.0.3">
+<h3 data-number="5.0.3" class="anchored" data-anchor-id="scatter-plot-income-vs-park-intensity"><span class="header-section-number">5.0.3</span> Scatter Plot: Income vs Park Intensity</h3>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
-Call:
-lm(formula = log_intensity ~ nearest_income, data = grid_df)
-
-Residuals:
-   Min     1Q Median     3Q    Max 
--6.279 -1.027  1.048  1.901  3.276 
-
-Coefficients:
-                 Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)    -2.207e+01  3.157e-02 -698.93   &lt;2e-16 ***
-nearest_income  4.665e-06  2.410e-07   19.36   &lt;2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 2.702 on 35667 degrees of freedom
-Multiple R-squared:  0.0104,    Adjusted R-squared:  0.01037 
-F-statistic: 374.7 on 1 and 35667 DF,  p-value: &lt; 2.2e-16</code></pre>
+Regression Results: Predictors of Park Intensity
+==========================================================
+                          Dependent variable:             
+              --------------------------------------------
+                          Log(Park Intensity)             
+               Global  High Income Low Income Multivariate
+                (1)        (2)        (3)         (4)     
+----------------------------------------------------------
+Median Income 0.00***    0.00***    0.00***     0.00***   
+               (0.00)    (0.00)      (0.00)      (0.00)   
+                                                          
+Population                                      -0.00***  
+                                                 (0.00)   
+                                                          
+Constant      -22.0***  -27.0***    -22.0***    -20.0***  
+              (0.030)    (0.10)     (0.050)      (0.10)   
+                                                          
+----------------------------------------------------------
+Observations   35,669    18,664      17,005      35,669   
+R2             0.010      0.20       0.020        0.10    
+Adjusted R2    0.010      0.20       0.020        0.10    
+==========================================================
+Note:                          *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = log_intensity ~ nearest_income, data = grid_df %&gt;% 
-    filter(income_group == "High income"))
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--5.5249 -2.0207  0.1853  2.3539  4.6599 
-
-Coefficients:
-                 Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)    -2.693e+01  6.988e-02 -385.39   &lt;2e-16 ***
-nearest_income  3.065e-05  4.183e-07   73.28   &lt;2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 2.746 on 18662 degrees of freedom
-Multiple R-squared:  0.2234,    Adjusted R-squared:  0.2234 
-F-statistic:  5369 on 1 and 18662 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = log_intensity ~ nearest_income, data = grid_df %&gt;% 
-    filter(income_group == "Low income"))
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--6.7867 -0.5603  0.7537  1.2917  2.6500 
-
-Coefficients:
-                 Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)    -2.185e+01  4.846e-02 -450.79   &lt;2e-16 ***
-nearest_income  1.265e-05  6.615e-07   19.12   &lt;2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 2.035 on 17003 degrees of freedom
-Multiple R-squared:  0.02105,   Adjusted R-squared:  0.02099 
-F-statistic: 365.6 on 1 and 17003 DF,  p-value: &lt; 2.2e-16</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = log_intensity ~ nearest_income + nearest_population, 
-    data = grid_df)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--7.2023 -1.0647  0.9046  1.8180  4.2095 
-
-Coefficients:
-                     Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)        -1.977e+01  5.876e-02 -336.44   &lt;2e-16 ***
-nearest_income      4.971e-06  2.343e-07   21.22   &lt;2e-16 ***
-nearest_population -6.139e-04  1.338e-05  -45.87   &lt;2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 2.625 on 35666 degrees of freedom
-Multiple R-squared:  0.06552,   Adjusted R-squared:  0.06547 
-F-statistic:  1250 on 2 and 35666 DF,  p-value: &lt; 2.2e-16</code></pre>
-</div>
-</div>
-<hr>
+<p>Table 1 summarizes the results of four OLS regression models designed to predict Park Intensity (<span class="math inline">\(\log(\text{Park Intensity})\)</span>).</p>
+<section id="global-trend-the-wealth-advantage-model-1" class="level4" data-number="5.0.3.1">
+<h4 data-number="5.0.3.1" class="anchored" data-anchor-id="global-trend-the-wealth-advantage-model-1"><span class="header-section-number">5.0.3.1</span> Global Trend: The Wealth Advantage (Model 1)</h4>
+<ul>
+<li><strong>Positive Association:</strong> The global model confirms a <strong>statistically significant positive relationship</strong> between median household income and park intensity. The coefficient for Median Income is positive and significant at the 99% confidence level (<code>***</code>).</li>
+<li><strong>Interpretation:</strong> Across the entire District, as neighborhood wealth increases, access to green space (measured by kernel density) systematically increases. This empirically validates the existence of income-based environmental disparities.</li>
+<li><strong>Low Explanatory Power:</strong> However, the <span class="math inline">\(R^2\)</span> of <strong>0.010</strong> indicates that income alone explains only <strong>1%</strong> of the variance globally. This suggests that while the trend exists, the city-wide spatial pattern is “noisy,” likely due to the presence of historic parks in commercial areas that do not align perfectly with residential wealth maps.</li>
+</ul>
 </section>
-<section id="conclusion" class="level3" data-number="5.0.7">
-<h3 data-number="5.0.7" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">5.0.7</span> <strong>Conclusion</strong></h3>
+<section id="structural-inequality-the-predictability-gap-model-2-vs.-model-3" class="level4" data-number="5.0.3.2">
+<h4 data-number="5.0.3.2" class="anchored" data-anchor-id="structural-inequality-the-predictability-gap-model-2-vs.-model-3"><span class="header-section-number">5.0.3.2</span> Structural Inequality: The “Predictability Gap” (Model 2 vs.&nbsp;Model 3)</h4>
+<p>The most revealing finding comes from comparing the <strong>High Income</strong> and <strong>Low Income</strong> models. This comparison uncovers a distinct structural divide in how green space is distributed:</p>
+<ul>
+<li><strong>High Income Tracts (Model 2):</strong>
+<ul>
+<li><strong>High Model Fit (<span class="math inline">\(R^2 = 0.20\)</span>):</strong> In wealthier neighborhoods, income is a robust predictor, explaining <strong>20%</strong> of the variation in park intensity.</li>
+<li><strong>Analysis:</strong> This indicates that in the upper class, the “market” for environmental amenities functions efficiently: higher property wealth reliably translates into better park access. The relationship is structural and predictable.</li>
+</ul></li>
+<li><strong>Low Income Tracts (Model 3):</strong>
+<ul>
+<li><strong>Low Model Fit (<span class="math inline">\(R^2 = 0.020\)</span>):</strong> In contrast, the model for lower-income neighborhoods effectively collapses, explaining only <strong>2%</strong> of the variation.</li>
+<li><strong>Analysis:</strong> In less affluent areas, the link between income and green space is weak and erratic. A neighborhood being “slightly less poor” does not guarantee better park access. This suggests that green space distribution in low-income areas is disjointed, potentially driven by random historic legacies rather than systematic planning or economic power.</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-density-penalty-model-4" class="level4" data-number="5.0.3.3">
+<h4 data-number="5.0.3.3" class="anchored" data-anchor-id="the-density-penalty-model-4"><span class="header-section-number">5.0.3.3</span> The “Density Penalty” (Model 4)</h4>
+<p>The multivariate model introduces <strong>Population</strong> as a control variable, revealing a critical secondary dynamic:</p>
+<ul>
+<li><strong>Negative Population Coefficient:</strong> The coefficient for Population is <strong>negative</strong> and highly significant (<code>***</code>).</li>
+<li><strong>Interpretation:</strong> Holding income constant, neighborhoods with higher population counts have <strong>lower</strong> park intensity.</li>
+<li><strong>The “Double Burden”:</strong> This highlights a compounding disadvantage for urban poor communities, which often reside in higher-density housing (e.g., apartments). These residents face a dual penalty:
+<ul>
+<li><strong>Economic Disadvantage:</strong> They lack the income to access high-amenity areas (Positive Income Coefficient).</li>
+<li><strong>Crowding Disadvantage:</strong> They live in areas where more people must compete for fewer green resources (Negative Population Coefficient).</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="conclusion" class="level3" data-number="5.0.4">
+<h3 data-number="5.0.4" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">5.0.4</span> Conclusion</h3>
+<p>The regression analysis confirms that environmental inequality in Washington, D.C. is not merely about a linear gap between rich and poor. It is a <strong>structural asymmetry</strong>: park access is a predictable privilege for the wealthy (<span class="math inline">\(R^2 = 0.20\)</span>), while for lower-income residents, it remains a scarce and randomly distributed resource (<span class="math inline">\(R^2 = 0.02\)</span>), further constrained by population density.</p>
 <hr>
 </section>
 </section>
 <section id="discussion" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> Discussion</h1>
+<p>This study utilized a multi-scalar geospatial approach to examine environmental justice in Washington, D.C., revealing a complex relationship between urban green space and socioeconomic status. While the initial hypothesis—that wealthier neighborhoods possess greater park access—was statistically supported, the findings suggest that inequality in the District is defined less by a simple linear gradient and more by <strong>structural asymmetry</strong> and <strong>historic urban design</strong>.</p>
+<section id="the-quantity-vs.-quality-paradox" class="level3" data-number="6.0.1">
+<h3 data-number="6.0.1" class="anchored" data-anchor-id="the-quantity-vs.-quality-paradox"><span class="header-section-number">6.0.1</span> The “Quantity vs.&nbsp;Quality” Paradox</h3>
+<p>A critical distinction emerged between park <em>frequency</em> and park <em>acreage</em>. As shown in the EDA, the historic L’Enfant Plan created a “green illusion” in the downtown core: a high frequency of small squares and circles that inflate park count metrics. However, our Kernel Density Estimation (KDE) and regression analysis revealed that outside this commercial center, a “green gap” exists. Wealthy Northwest neighborhoods benefit from consolidated, massive landscapes (e.g., Rock Creek Park), while low-income Southeast neighborhoods suffer from “double deprivation”—lacking both the high frequency of small parks seen downtown and the large acreage of parks seen in the Northwest.</p>
+</section>
+<section id="the-asymmetry-of-privilege" class="level3" data-number="6.0.2">
+<h3 data-number="6.0.2" class="anchored" data-anchor-id="the-asymmetry-of-privilege"><span class="header-section-number">6.0.2</span> The Asymmetry of Privilege</h3>
+<p>The most novel finding of this research is the <strong>structural divergence</strong> identified in the stratified regression models. We found that environmental amenities function as a “predictable market good” only for the wealthy (<span class="math inline">\(R^2 = 0.20\)</span>), where higher income reliably secures better park access. In contrast, for lower-income residents (<span class="math inline">\(R^2 = 0.02\)</span>), the link between economic status and environmental quality is broken. This implies that market forces alone cannot solve green inequity in distressed communities; simply increasing the income of poor households slightly may not result in better environmental conditions without deliberate urban planning interventions.</p>
+</section>
+<section id="the-density-penalty" class="level3" data-number="6.0.3">
+<h3 data-number="6.0.3" class="anchored" data-anchor-id="the-density-penalty"><span class="header-section-number">6.0.3</span> The Density Penalty</h3>
+<p>Our multivariate analysis introduced a crucial demographic dimension: population density acts as a negative predictor of park intensity. This confirms a “crowding penalty” often cited in environmental justice literature. Lower-income residents, who are more likely to live in high-density housing without private yards, are paradoxically located in areas with the lowest per-capita provision of public green space. This mismatch exacerbates the public health implications of the urban heat island effect and lack of recreational space.</p>
 <hr>
+</section>
 </section>
 <section id="conclusion-1" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> Conclusion</h1>
+</section>
+<section id="conclusion-2" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Conclusion</h1>
+<p>This project set out to investigate the spatial distribution of parks in Washington, D.C., specifically evaluating <strong>whether higher-income neighborhoods receive disproportionately greater access to green space.</strong> By integrating inhomogeneous intensity estimation with simulation-based hypothesis testing, this study provides empirical evidence to answer the core questions raised in the introduction.</p>
+<section id="answering-the-core-question-evidence-of-disproportionate-access" class="level3" data-number="8.0.1">
+<h3 data-number="8.0.1" class="anchored" data-anchor-id="answering-the-core-question-evidence-of-disproportionate-access"><span class="header-section-number">8.0.1</span> Answering the Core Question: Evidence of Disproportionate Access</h3>
+<p>The analysis affirmatively answers the study’s central research question: <strong>Yes, higher-income neighborhoods do receive disproportionately greater access to green amenities</strong>, but the nature of this advantage is structural rather than linear.</p>
+<ul>
+<li>The <strong>simulation-based hypothesis tests</strong> (Monte Carlo) confirmed that the observed park patterns significantly deviate from random expectation, revealing distinct “hotspots” and “voids” that align with socioeconomic strata.</li>
+<li>The <strong>regression analysis</strong> quantified this disparity, showing that median household income is a robust predictor (<span class="math inline">\(R^2 = 0.20\)</span>) of park intensity in wealthy areas, whereas the relationship collapses (<span class="math inline">\(R^2 = 0.02\)</span>) in lower-income communities. This confirms that the “green space deficits” mentioned in the introduction are not random, but are systematic features of the city’s lower-income landscape.</li>
+</ul>
+</section>
+<section id="characterizing-the-urban-landscape-of-inequity" class="level3" data-number="8.0.2">
+<h3 data-number="8.0.2" class="anchored" data-anchor-id="characterizing-the-urban-landscape-of-inequity"><span class="header-section-number">8.0.2</span> Characterizing the “Urban Landscape of Inequity”</h3>
+<p>Returning to the introduction’s concern regarding “structural inequities embedded within the urban landscape,” our findings uncover a complex, three-tiered reality:</p>
+<ul>
+<li><strong>The Privileged Northwest:</strong> Here, wealth effectively “buys” consistency. High incomes correlate strongly with high-quality, consolidated green spaces (e.g., Rock Creek Park).</li>
+<li><strong>The Historic Core:</strong> The downtown area defies the income trend solely due to the L’Enfant Plan’s legacy, creating a high frequency of small parks that offers accessibility but lacks the ecological scale of the Northwest.</li>
+<li><strong>The Disadvantaged Southeast:</strong> Residents here face the “double burden” hypothesized in the literature: a scarcity of park access points combined with higher population density. This creates a genuine “green void” where environmental benefits are least accessible to those with the fewest private resources.</li>
+</ul>
+</section>
+<section id="implications-for-planning-and-equity" class="level3" data-number="8.0.3">
+<h3 data-number="8.0.3" class="anchored" data-anchor-id="implications-for-planning-and-equity"><span class="header-section-number">8.0.3</span> Implications for Planning and Equity</h3>
+<p>The introduction highlighted the need for “equitable resource allocation.” This study concludes that achieving such equity requires more than a uniform increase in park numbers. Since the “market” for green space fails in lower-income neighborhoods (as shown by the breakdown of our regression models), urban planning must move from <strong>passive allocation</strong> to <strong>active intervention</strong>. Future policy must prioritize the “crowded” and “unpredictable” zones identified in this analysis, ensuring that public well-being and environmental quality are guaranteed rights for all residents, regardless of their socioeconomic status.</p>
 <hr>
 </section>
-<section id="references" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> References</h1>
+</section>
+<section id="references" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> References</h1>
 <p>Wolch, Jennifer R., Jason Byrne, and Joshua P. Newell. 2014. “Urban Green Space, Public Health, and Environmental Justice: The Challenge of Making Cities ‘Just Green Enough.’” Landscape and Urban Planning 125: 234–244.</p>
 <p>Boone, Christopher G., Geoffrey L. Buckley, J. Morgan Grove, and Chona Sister. 2009. “Parks and People: An Environmental Justice Inquiry in Baltimore, Maryland.” Annals of the Association of American Geographers 99(4): 767–787.</p>
 <p>Rigolon, Alessandro. 2016. “A Complex Landscape of Inequity in Access to Urban Parks: A Literature Review.” Landscape and Urban Planning 153: 160–169.</p>
